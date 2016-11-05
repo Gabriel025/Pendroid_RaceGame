@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
@@ -34,6 +36,7 @@ public class PlayScreen implements Screen {
     SpriteBatch spriteBatch;
     Texture texture;
 
+
     public PlayScreen(Main game) {
         this.game = game;
 
@@ -48,8 +51,25 @@ public class PlayScreen implements Screen {
         playerCar = new PlayerCar(world);
 
         hud = new HUD(spriteBatch);
-
         texture = new Texture(Gdx.files.internal("badlogic.jpg"));
+
+        BodyLoader bodyLoader = new BodyLoader(Gdx.files.internal("asd.json"));
+        // 1. Create a BodyDef, as usual.
+        BodyDef bd = new BodyDef();
+        bd.position.set(0, 0);
+        bd.type = BodyDef.BodyType.DynamicBody;
+
+        // 2. Create a FixtureDef, as usual.
+        FixtureDef fd = new FixtureDef();
+        fd.density = 1;
+        fd.friction = 0.5f;
+        fd.restitution = 0.3f;
+
+        // 3. Create a Body, as usual.
+        Body body = world.createBody(bd);
+
+        // 4. Create the body fixture automatically by using the loader.
+        bodyLoader.attachFixture(body, "Name", fd, 10);
     }
 
 
@@ -72,7 +92,7 @@ public class PlayScreen implements Screen {
 
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(gamecam.combined);
-        spriteBatch.draw(texture, 0, 0, 1000, 1000);
+        //spriteBatch.draw(texture, 0, 0, 1000, 1000);
         spriteBatch.end();
 
         b2dr.render(this.world, this.gamecam.combined);

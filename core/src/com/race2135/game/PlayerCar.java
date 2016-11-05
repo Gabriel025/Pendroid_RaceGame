@@ -23,7 +23,9 @@ public class PlayerCar {
 
     byte input = 0;
 
-    public void __PlayerCar(World world) {
+    float scale = 1;
+
+    /*public void __PlayerCar(World world) {
         BodyDef bodyDef = new BodyDef();
 
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -98,7 +100,7 @@ public class PlayerCar {
         jointDef.localAnchorA.set(3/ Main.PPM * 4, 8.5f/ Main.PPM * 4);
         rightJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
-    }
+    }*/
 
     public PlayerCar(World world) {
         BodyDef bodyDef = new BodyDef();
@@ -108,7 +110,7 @@ public class PlayerCar {
         body.setAngularDamping(3);
 
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(0.9f, 2);
+        polygonShape.setAsBox(0.9f * scale, 2 * scale);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
@@ -125,7 +127,7 @@ public class PlayerCar {
 
         float maxForwardSpeed = 120;
         float maxBackwardSpeed = -20;
-        float backTireMaxDriveForce = 100;
+        float backTireMaxDriveForce = 60 * scale;
         float frontTireMaxDriveForce = 0;
         float backTireMaxLateralImpulse = 0;
         float frontTireMaxLateralImpulse = 0;
@@ -134,7 +136,7 @@ public class PlayerCar {
         tire.setValues(maxForwardSpeed, maxBackwardSpeed,
                 backTireMaxDriveForce, backTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(-0.9f, -1.6f);
+        jointDef.localAnchorA.set(-0.9f * scale, -1.6f * scale);
         world.createJoint(jointDef);
         tires.add(tire);
 
@@ -142,7 +144,7 @@ public class PlayerCar {
         tire.setValues(maxForwardSpeed, maxBackwardSpeed,
                 backTireMaxDriveForce, backTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(0.9f, -1.6f);
+        jointDef.localAnchorA.set(0.9f * scale, -1.6f * scale);
         world.createJoint(jointDef);
         tires.add(tire);
 
@@ -150,7 +152,7 @@ public class PlayerCar {
         tire.setValues(maxForwardSpeed, maxBackwardSpeed,
                 frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(-0.9f, 1.6f);
+        jointDef.localAnchorA.set(-0.9f * scale, 1.6f * scale);
         leftJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
 
@@ -158,7 +160,7 @@ public class PlayerCar {
         tire.setValues(maxForwardSpeed, maxBackwardSpeed,
                 frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(0.9f, 1.6f);
+        jointDef.localAnchorA.set(0.9f * scale, 1.6f * scale);
         rightJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
     }
