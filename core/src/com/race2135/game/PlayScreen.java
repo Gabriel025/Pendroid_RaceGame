@@ -1,7 +1,5 @@
 package com.race2135.game;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,17 +7,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 
 public class PlayScreen implements Screen {
     private Main game;
@@ -38,7 +29,7 @@ public class PlayScreen implements Screen {
         this.game = game;
 
         gamecam = new OrthographicCamera();
-        viewport = new FillViewport(80, 60, gamecam);
+        viewport = new FillViewport(40, 30, gamecam);
 
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
@@ -48,6 +39,7 @@ public class PlayScreen implements Screen {
         playerCar = new PlayerCar(world);
 
         hud = new HUD(spriteBatch);
+        Gdx.input.setInputProcessor(hud);
 
         texture = new Texture(Gdx.files.internal("badlogic.jpg"));
     }
