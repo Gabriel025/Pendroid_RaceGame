@@ -25,24 +25,24 @@ public class Tire {
     float maxForwardSpeed, maxBackwardSpeed, maxDriveForce, maxLateralImpulse;
 
 
-    public void __Tire(World world) {
+   /* public void __Tire(World world) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodyDef);
 
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(2f / Main.PPM, 3f / Main.PPM);
+        polygonShape.setAsBox(0.02f, 0.03f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 1;
         fixtureDef.shape = polygonShape;
         fixtureDef.isSensor = true;
        /* fixtureDef.filter.categoryBits = Constants.TIRE;
-        fixtureDef.filter.maskBits  = Constants.GROUND;*/
+        fixtureDef.filter.maskBits  = Constants.GROUND;
         Fixture fixture = body.createFixture(fixtureDef);
 
         body.setUserData(this);
-    }
+    }*/
 
     public Tire(World world) {
         BodyDef bodyDef = new BodyDef();
