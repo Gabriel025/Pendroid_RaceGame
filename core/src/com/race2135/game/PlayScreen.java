@@ -40,29 +40,28 @@ public class PlayScreen implements Screen {
         spriteBatch = new SpriteBatch();
 
         playerCar = new PlayerCar(world);
+        playerCar.body.setTransform(170, 80, 0);
 
         hud = new HUD(spriteBatch);
         Gdx.input.setInputProcessor(hud);
 
-        texture = new Texture(Gdx.files.internal("badlogic.jpg"));
+        texture = new Texture(Gdx.files.internal("race.png"));
 
-        BodyLoader bodyLoader = new BodyLoader(Gdx.files.internal("asd.json"));
-        // 1. Create a BodyDef, as usual.
+        BodyLoader bodyLoader = new BodyLoader(Gdx.files.internal("map_physics1.json"));
+
         BodyDef bd = new BodyDef();
         bd.position.set(0, 0);
         bd.type = BodyDef.BodyType.DynamicBody;
 
-        // 2. Create a FixtureDef, as usual.
         FixtureDef fd = new FixtureDef();
         fd.density = 1;
         fd.friction = 0.5f;
         fd.restitution = 0.3f;
 
-        // 3. Create a Body, as usual.
         Body body = world.createBody(bd);
 
-        // 4. Create the body fixture automatically by using the loader.
-        bodyLoader.attachFixture(body, "Name", fd, 10);
+        bodyLoader.attachFixture(body, "Name", fd, 400);
+       System.out.print( body.getFixtureList());
     }
 
 
@@ -85,7 +84,7 @@ public class PlayScreen implements Screen {
 
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(gamecam.combined);
-        //spriteBatch.draw(texture, 0, 0, 1000, 1000);
+        spriteBatch.draw(texture, 0, 0, 400, 400);
         spriteBatch.end();
 
         b2dr.render(this.world, this.gamecam.combined);

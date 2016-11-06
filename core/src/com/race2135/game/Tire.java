@@ -110,7 +110,7 @@ public class Tire {
         //body.applyAngularImpulse(0.1f * body.getInertia() * -body.getAngularVelocity(), true);
         //body.applyTorque(0.1f * body.getInertia() * -body.getAngularVelocity(), true);
 
-        Vector2 dragForce = getForwardVelocity().scl(-0.01f);
+        Vector2 dragForce = getForwardVelocity().scl(-0.05f);
 
         body.applyForceToCenter(dragForce, true);
     }

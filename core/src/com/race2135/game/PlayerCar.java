@@ -125,9 +125,9 @@ public class PlayerCar {
         jointDef.upperAngle = 0;
         jointDef.localAnchorB.setZero();
 
-        float maxForwardSpeed = 120;
-        float maxBackwardSpeed = -20;
-        float backTireMaxDriveForce = 60 * scale;
+        float maxForwardSpeed = 30;
+        float maxBackwardSpeed = -10;
+        float backTireMaxDriveForce = 10 * scale;
         float frontTireMaxDriveForce = 0;
         float backTireMaxLateralImpulse = 0;
         float frontTireMaxLateralImpulse = 0;
