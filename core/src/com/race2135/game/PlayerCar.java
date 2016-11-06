@@ -21,9 +21,7 @@ public class PlayerCar {
     Array<Tire> tires = new Array<Tire>();
     RevoluteJoint leftJoint, rightJoint;
 
-    byte input = 0;
-
-    float scale = 1;
+    private byte input = 0;
 
     /*public void __PlayerCar(World world) {
         BodyDef bodyDef = new BodyDef();
@@ -110,11 +108,12 @@ public class PlayerCar {
         body.setAngularDamping(3);
 
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(0.9f * scale, 2 * scale);
+        polygonShape.setAsBox(0.9f, 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
         fixtureDef.density = 0.1f;
+        fixtureDef.friction = 1;
 
         body.createFixture(fixtureDef);
 
@@ -125,9 +124,15 @@ public class PlayerCar {
         jointDef.upperAngle = 0;
         jointDef.localAnchorB.setZero();
 
+<<<<<<< HEAD
         float maxForwardSpeed = 30;
         float maxBackwardSpeed = -10;
         float backTireMaxDriveForce = 10 * scale;
+=======
+        float maxForwardSpeed = 120;
+        float maxBackwardSpeed = -20;
+        float backTireMaxDriveForce = 30;
+>>>>>>> origin/master
         float frontTireMaxDriveForce = 0;
         float backTireMaxLateralImpulse = 0;
         float frontTireMaxLateralImpulse = 0;
@@ -136,7 +141,7 @@ public class PlayerCar {
         tire.setValues(maxForwardSpeed, maxBackwardSpeed,
                 backTireMaxDriveForce, backTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(-0.9f * scale, -1.6f * scale);
+        jointDef.localAnchorA.set(-0.9f, -1.6f);
         world.createJoint(jointDef);
         tires.add(tire);
 
@@ -144,7 +149,7 @@ public class PlayerCar {
         tire.setValues(maxForwardSpeed, maxBackwardSpeed,
                 backTireMaxDriveForce, backTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(0.9f * scale, -1.6f * scale);
+        jointDef.localAnchorA.set(0.9f, -1.6f);
         world.createJoint(jointDef);
         tires.add(tire);
 
@@ -152,7 +157,7 @@ public class PlayerCar {
         tire.setValues(maxForwardSpeed, maxBackwardSpeed,
                 frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(-0.9f * scale, 1.6f * scale);
+        jointDef.localAnchorA.set(-0.9f, 1.6f);
         leftJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
 
@@ -160,7 +165,7 @@ public class PlayerCar {
         tire.setValues(maxForwardSpeed, maxBackwardSpeed,
                 frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(0.9f * scale, 1.6f * scale);
+        jointDef.localAnchorA.set(0.9f, 1.6f);
         rightJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
     }
@@ -172,7 +177,7 @@ public class PlayerCar {
             tire.updateDrive();
         }
 
-        float lockAngle = 20 * Main.DEGTORAD;
+        float lockAngle = 30 * Main.DEGTORAD;
         float turnSpeed = 80 * Main.DEGTORAD;
         float turnPerStep = turnSpeed / 60.0f;
         float desiredAngle = 0;

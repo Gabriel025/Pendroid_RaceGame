@@ -32,7 +32,7 @@ public class PlayScreen implements Screen {
         this.game = game;
 
         gamecam = new OrthographicCamera();
-        viewport = new FillViewport(80, 60, gamecam);
+        viewport = new FillViewport(40, 30, gamecam);
 
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
@@ -49,9 +49,11 @@ public class PlayScreen implements Screen {
 
         BodyLoader bodyLoader = new BodyLoader(Gdx.files.internal("map_physics1.json"));
 
+
+
         BodyDef bd = new BodyDef();
         bd.position.set(0, 0);
-        bd.type = BodyDef.BodyType.DynamicBody;
+        bd.type = BodyDef.BodyType.StaticBody;
 
         FixtureDef fd = new FixtureDef();
         fd.density = 1;
@@ -61,7 +63,6 @@ public class PlayScreen implements Screen {
         Body body = world.createBody(bd);
 
         bodyLoader.attachFixture(body, "Name", fd, 400);
-       System.out.print( body.getFixtureList());
     }
 
 
@@ -79,6 +80,7 @@ public class PlayScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gamecam.position.set(playerCar.body.getWorldCenter(), gamecam.position.z);
+        gamecam.up.set(new Vector2(0, 1).rotateRad(playerCar.body.getAngle()), 0);
         gamecam.update();
         viewport.apply();
 
