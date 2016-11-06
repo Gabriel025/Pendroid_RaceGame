@@ -32,7 +32,7 @@ public class PlayScreen implements Screen {
         this.game = game;
 
         gamecam = new OrthographicCamera();
-        viewport = new FillViewport(40, 30, gamecam);
+        viewport = new FillViewport(80, 60, gamecam);
 
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
@@ -40,7 +40,7 @@ public class PlayScreen implements Screen {
         spriteBatch = new SpriteBatch();
 
         playerCar = new PlayerCar(world);
-        playerCar.body.setTransform(170, 80, 0);
+        playerCar.body.setTransform(105, 80, 0);
 
         hud = new HUD(spriteBatch);
         Gdx.input.setInputProcessor(hud);
@@ -48,8 +48,6 @@ public class PlayScreen implements Screen {
         texture = new Texture(Gdx.files.internal("race.png"));
 
         BodyLoader bodyLoader = new BodyLoader(Gdx.files.internal("map_physics1.json"));
-
-
 
         BodyDef bd = new BodyDef();
         bd.position.set(0, 0);
