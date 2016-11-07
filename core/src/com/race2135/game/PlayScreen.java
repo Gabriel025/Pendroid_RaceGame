@@ -40,7 +40,6 @@ public class PlayScreen implements Screen {
         spriteBatch = new SpriteBatch();
 
         playerCar = new PlayerCar(world);
-        playerCar.body.setTransform(170, 80, 0);
 
         hud = new HUD(spriteBatch);
         Gdx.input.setInputProcessor(hud);
@@ -87,6 +86,8 @@ public class PlayScreen implements Screen {
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(gamecam.combined);
         spriteBatch.draw(texture, 0, 0, 400, 400);
+
+        playerCar.sprite.draw(spriteBatch, world);
         spriteBatch.end();
 
         b2dr.render(this.world, this.gamecam.combined);
