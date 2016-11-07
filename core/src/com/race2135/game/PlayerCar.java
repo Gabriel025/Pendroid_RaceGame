@@ -63,7 +63,11 @@ public class PlayerCar {
 
         float maxForwardSpeed = 120;
         float maxBackwardSpeed = -20;
+<<<<<<< HEAD
         float backTireMaxDriveForce = 10;
+=======
+        float backTireMaxDriveForce = 30;
+>>>>>>> origin/master
         float frontTireMaxDriveForce = 0;
         float backTireMaxLateralImpulse = 0;
         float frontTireMaxLateralImpulse = 0;
