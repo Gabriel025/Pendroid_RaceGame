@@ -1,5 +1,6 @@
 package com.race2135.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,11 +17,11 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PlayScreen implements Screen {
-    private Main game;
     private OrthographicCamera gamecam;
     private Viewport viewport;
     private World world;
     private Box2DDebugRenderer b2dr;
+    private Game game;
 
     PlayerCar playerCar;
     HUD hud;
@@ -28,9 +29,8 @@ public class PlayScreen implements Screen {
     SpriteBatch spriteBatch;
     Texture texture;
 
-    public PlayScreen(Main game) {
+    public PlayScreen(Game game) {
         this.game = game;
-
         gamecam = new OrthographicCamera();
         viewport = new FillViewport(80, 60, gamecam);
 
@@ -40,10 +40,7 @@ public class PlayScreen implements Screen {
         spriteBatch = new SpriteBatch();
 
         playerCar = new PlayerCar(world);
-<<<<<<< HEAD
-=======
         playerCar.body.setTransform(105, 80, 0);
->>>>>>> origin/master
 
         hud = new HUD(spriteBatch);
         Gdx.input.setInputProcessor(hud);

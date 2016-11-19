@@ -36,6 +36,7 @@ public class PlayerCar {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(90,80);
+        bodyDef.angle = 0;
 
         body = world.createBody(bodyDef);
         body.setAngularDamping(3);
@@ -63,11 +64,9 @@ public class PlayerCar {
 
         float maxForwardSpeed = 120;
         float maxBackwardSpeed = -20;
-<<<<<<< HEAD
-        float backTireMaxDriveForce = 10;
-=======
+
         float backTireMaxDriveForce = 30;
->>>>>>> origin/master
+
         float frontTireMaxDriveForce = 0;
         float backTireMaxLateralImpulse = 0;
         float frontTireMaxLateralImpulse = 0;
@@ -112,7 +111,7 @@ public class PlayerCar {
             tire.updateDrive();
         }
 
-        float lockAngle = 30 * Main.DEGTORAD;
+        float lockAngle = 50 * Main.DEGTORAD;
         float turnSpeed = 80 * Main.DEGTORAD;
         float turnPerStep = turnSpeed / 60.0f;
         float desiredAngle = 0;

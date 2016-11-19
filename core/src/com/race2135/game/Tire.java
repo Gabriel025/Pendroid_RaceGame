@@ -104,7 +104,7 @@ public class Tire {
     }
 
     public void updateFriction() {
-        Vector2 impulse = getLateralVelocity().scl(-0.5f);
+        Vector2 impulse = getLateralVelocity().scl(-0.2f);
 
         body.applyForceToCenter(impulse, true);
         //body.applyAngularImpulse(0.1f * body.getInertia() * -body.getAngularVelocity(), true);

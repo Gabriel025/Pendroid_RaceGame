@@ -11,7 +11,7 @@ public class Main extends Game {
 	@Override
 	public void create () {
         Box2D.init();
-        setScreen(new PlayScreen(this));
+        setScreen(new MainMenu(this));
 	}
 
 	@Override
