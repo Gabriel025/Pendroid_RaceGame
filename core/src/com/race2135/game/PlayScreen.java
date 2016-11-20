@@ -21,7 +21,7 @@ public class PlayScreen implements Screen {
     private Viewport viewport;
     private World world;
     private Box2DDebugRenderer b2dr;
-    private Game game;
+    private Main game;
 
     PlayerCar playerCar;
     HUD hud;
@@ -29,21 +29,21 @@ public class PlayScreen implements Screen {
     SpriteBatch spriteBatch;
     Texture texture;
 
-    public PlayScreen(Game game) {
+    public PlayScreen(Main game) {
         this.game = game;
         gamecam = new OrthographicCamera();
         viewport = new FillViewport(80, 60, gamecam);
+
+        hud = new HUD();
 
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
 
         spriteBatch = new SpriteBatch();
 
-        playerCar = new PlayerCar(world);
+        playerCar = new PlayerCar(world, hud);
         playerCar.body.setTransform(105, 80, 0);
 
-        hud = new HUD(spriteBatch);
-        Gdx.input.setInputProcessor(hud);
 
         texture = new Texture(Gdx.files.internal("race.png"));
 
@@ -63,7 +63,9 @@ public class PlayScreen implements Screen {
         bodyLoader.attachFixture(body, "Name", fd, 400);
     }
 
-
+    public void show() {
+        Gdx.input.setInputProcessor(hud);
+    }
 
     public void update(float dt) {
         playerCar.update();
@@ -86,12 +88,12 @@ public class PlayScreen implements Screen {
         spriteBatch.setProjectionMatrix(gamecam.combined);
         spriteBatch.draw(texture, 0, 0, 400, 400);
 
-        playerCar.sprite.draw(spriteBatch, world);
+        playerCar.render(spriteBatch);
         spriteBatch.end();
 
         b2dr.render(this.world, this.gamecam.combined);
 
-        hud.render();
+        hud.render(spriteBatch);
     }
 
 
@@ -100,17 +102,8 @@ public class PlayScreen implements Screen {
         hud.resize(width, height);
     }
 
-    public void show() {
-    }
-    public void pause() {
-    }
-
-    public void resume() {
-    }
-
-    public void hide() {
-    }
-
-    public void dispose() {
-    }
+    public void pause() { }
+    public void resume() { }
+    public void hide() { }
+    public void dispose() { }
 }

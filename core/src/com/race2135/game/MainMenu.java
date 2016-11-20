@@ -18,23 +18,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MainMenu implements Screen {
+    Main game;
+
     Skin skin;
     Stage stage;
     SpriteBatch batch;
 
-    Game g;
-    public MainMenu(Game g){
-        create();
-        this.g=g;
-    }
+    public MainMenu(Main g){
+        game= g;
 
-    public MainMenu(){
-        create();
-    }
-    public void create(){
         batch = new SpriteBatch();
         stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
 
         skin = new Skin();
         Pixmap pixmap = new Pixmap(100, 50, Format.RGBA8888);
@@ -42,7 +36,7 @@ public class MainMenu implements Screen {
         pixmap.fill();
 
         skin.add("background", new Texture(pixmap));
-        BitmapFont bfont=new BitmapFont();
+        BitmapFont bfont = new BitmapFont();
         skin.add("default",bfont);
 
         TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -56,18 +50,22 @@ public class MainMenu implements Screen {
 
         skin.add("default", textButtonStyle);
 
-        final TextButton textButton=new TextButton("PLAY",textButtonStyle);
+        final TextButton textButton = new TextButton("PLAY",textButtonStyle);
         textButton.setPosition(400 - textButton.getWidth() / 2, 240 - textButton.getHeight() / 2);
         stage.addActor(textButton);
 
         textButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 textButton.setText("Starting new game");
-                g.setScreen( new PlayScreen(g));
+                game.setScreen(game.playScreen);
 
             }
         });
+    }
 
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     public void render (float delta) {
@@ -85,12 +83,6 @@ public class MainMenu implements Screen {
     public void dispose () {
         stage.dispose();
         skin.dispose();
-    }
-
-    @Override
-    public void show() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
