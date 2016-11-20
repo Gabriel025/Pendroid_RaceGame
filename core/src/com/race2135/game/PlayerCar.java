@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -20,7 +21,7 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
  * Created by Adam on 2016. 11. 01.
  */
 public class PlayerCar {
-
+    World world;
     Body body;
     Array<Tire> tires = new Array<Tire>();
     RevoluteJoint leftJoint, rightJoint;
@@ -28,10 +29,15 @@ public class PlayerCar {
     Box2DSprite sprite;
     Texture texture;
 
-
+    HUD hud;
     private byte input = 0;
 
-    public PlayerCar(World world) {
+    float engineRPM = 0;
+
+    public PlayerCar(World world, HUD hud) {
+        this.hud = hud;
+
+        this.world = world;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -62,42 +68,34 @@ public class PlayerCar {
         jointDef.upperAngle = 0;
         jointDef.localAnchorB.setZero();
 
+        /*
         float maxForwardSpeed = 120;
         float maxBackwardSpeed = -20;
-
         float backTireMaxDriveForce = 30;
-
         float frontTireMaxDriveForce = 0;
         float backTireMaxLateralImpulse = 0;
         float frontTireMaxLateralImpulse = 0;
+        */
 
         Tire tire = new Tire(world);
-        tire.setValues(maxForwardSpeed, maxBackwardSpeed,
-                backTireMaxDriveForce, backTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(-0.9f, -1.6f);
         world.createJoint(jointDef);
         tires.add(tire);
 
         tire = new Tire(world);
-        tire.setValues(maxForwardSpeed, maxBackwardSpeed,
-                backTireMaxDriveForce, backTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(0.9f, -1.6f);
         world.createJoint(jointDef);
         tires.add(tire);
 
         tire = new Tire(world);
-        tire.setValues(maxForwardSpeed, maxBackwardSpeed,
-                frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(-0.9f, 1.6f);
         leftJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
 
         tire = new Tire(world);
-        tire.setValues(maxForwardSpeed, maxBackwardSpeed,
-                frontTireMaxDriveForce, frontTireMaxLateralImpulse);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(0.9f, 1.6f);
         rightJoint = (RevoluteJoint)world.createJoint(jointDef);
@@ -106,13 +104,20 @@ public class PlayerCar {
 
     public void update() {
         inputHandler();
+
+        int driveRPM = 4500, idleRPM = 0;
+
+        engineRPM = MathUtils.lerp(engineRPM, (driveRPM - idleRPM) * hud.getThrottle() + idleRPM, 0.3f);
+
+        Gdx.app.log("RPM", "" + engineRPM);
+
         for (Tire tire : tires) {
+            tire.updateDrive(engineRPM);
             tire.updateFriction();
-            tire.updateDrive();
         }
 
-        float lockAngle = 50 * Main.DEGTORAD;
-        float turnSpeed = 80 * Main.DEGTORAD;
+        float lockAngle = 50 * MathUtils.degreesToRadians;
+        float turnSpeed = 80 * MathUtils.degreesToRadians;
         float turnPerStep = turnSpeed / 60.0f;
         float desiredAngle = 0;
 
@@ -152,10 +157,15 @@ public class PlayerCar {
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
             input |= Tire.DIR_LEFT;
 
-        for (Tire tire : tires)
-            tire.direction = input;
+        //for (Tire tire : tires)
+        //    tire.direction = input;
 
         //Gdx.app.debug("Input", ((input & 1) == 1 ? "U" : "") + ((input & 2) == 2 ? "D" : "")
         //        + ((input & 4) == 4 ? "L" : "") + ((input & 8) == 8 ? "R" : ""));
+    }
+
+    public void render(SpriteBatch batch)
+    {
+        sprite.draw(batch, world);
     }
 }

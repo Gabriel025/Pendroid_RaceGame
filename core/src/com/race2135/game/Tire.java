@@ -1,5 +1,7 @@
 package com.race2135.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -12,17 +14,16 @@ import com.badlogic.gdx.physics.box2d.World;
  * Created by Adam on 2016. 10. 31..
  */
 public class Tire {
-
+    private World world;
     Body body;
-
     /*public enum Direction{up, down, right, left, stop};
     Direction direction = Direction.stop;*/
 
     //For further information, search for "bit fields"
     public static final byte DIR_UP = 1, DIR_DOWN = 2, DIR_LEFT = 4, DIR_RIGHT = 8;
-    public byte direction = 0;
+    //public byte direction = 0;
 
-    float maxForwardSpeed, maxBackwardSpeed, maxDriveForce, maxLateralImpulse;
+    //float maxForwardSpeed, maxBackwardSpeed, maxDriveForce, maxLateralImpulse;
 
 
    /* public void __Tire(World world) {
@@ -45,6 +46,8 @@ public class Tire {
     }*/
 
     public Tire(World world) {
+        this.world = world;
+
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         body = world.createBody(bodyDef);
@@ -57,18 +60,16 @@ public class Tire {
         fixtureDef.density = 1;
         fixtureDef.isSensor = true;
         Fixture fixture = body.createFixture(fixtureDef);
-
-        //body.setUserData(this);
     }
 
-    //TODO create proper mutators and accessors
+    /*
     public void setValues(float a, float b, float c, float d){
         maxForwardSpeed = a;
         maxBackwardSpeed = b;
         maxDriveForce = c;
         maxLateralImpulse = d;
-
     }
+    */
 
     Vector2 getForwardVelocity() {
         Vector2 result = body.getWorldVector(new Vector2(0, 1)); //Forw. normal
@@ -84,7 +85,8 @@ public class Tire {
         return result;
     }
 
-    public void updateDrive() {
+    public void updateDrive(float driveRPM) {
+        /*
         float speed = getForwardVelocity().len();
 
         Vector2 driveForce = body.getWorldVector(new Vector2(0, 1));
@@ -99,6 +101,14 @@ public class Tire {
             default:
                 return;
         }
+
+        body.applyForceToCenter(driveForce, true);
+        */
+
+        //TODO: "0.325f" is the tire diameter, it should be customizable later on
+
+        Vector2 driveForce = body.getWorldVector(new Vector2(0, 1));
+        driveForce.scl((0.325f * MathUtils.PI) / 60 * driveRPM);
 
         body.applyForceToCenter(driveForce, true);
     }
