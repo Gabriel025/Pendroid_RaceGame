@@ -33,21 +33,21 @@ public class GameInput implements InputProcessor {
     //Touch input handling
     private class Touch
     {
-        public int x, y, pointer;
+        int x, y, pointer;
 
-        public Touch()
+        Touch()
         {
             x = y = pointer = 0;
         }
 
-        public Touch(int x, int y, int pointer)
+        Touch(int x, int y, int pointer)
         {
             this.x = x;
             this.y = y;
             this.pointer = pointer;
         }
     }
-    Array<Touch> touchArray;
+    private Array<Touch> touchArray;
 
     //Textures, sprites and a font
     private Texture texBkg, texGasPedal, texBrakePedal, texKnob;
