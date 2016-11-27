@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
  */
 public class Tire {
     private World world;
+    CarInfo carInfo;
     Body body;
     /*public enum Direction{up, down, right, left, stop};
     Direction direction = Direction.stop;*/
@@ -45,8 +46,9 @@ public class Tire {
         body.setUserData(this);
     }*/
 
-    public Tire(World world) {
+    public Tire(World world, CarInfo info) {
         this.world = world;
+        carInfo = info;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;

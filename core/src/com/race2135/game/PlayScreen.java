@@ -20,7 +20,9 @@ public class PlayScreen implements Screen {
     private Viewport viewport;
     private World world;
     private Box2DDebugRenderer b2dr;
+
     private Main game;
+    GameInstanceInfo instanceInfo;
 
     PlayerCar playerCar;
     GameInput gameInput;
@@ -28,8 +30,10 @@ public class PlayScreen implements Screen {
     SpriteBatch spriteBatch;
     Texture texture;
 
-    public PlayScreen(Main game) {
+    public PlayScreen(Main game, GameInstanceInfo instanceInfo) {
         this.game = game;
+        this.instanceInfo = instanceInfo;
+
         gamecam = new OrthographicCamera();
         viewport = new FillViewport(80, 60, gamecam);
 
@@ -40,7 +44,7 @@ public class PlayScreen implements Screen {
 
         spriteBatch = new SpriteBatch();
 
-        playerCar = new PlayerCar(world, gameInput);
+        playerCar = new PlayerCar(world, instanceInfo.carInfo, gameInput);
         playerCar.body.setTransform(105, 80, 0);
 
 

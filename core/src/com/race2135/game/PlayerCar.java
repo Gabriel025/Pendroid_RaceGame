@@ -21,23 +21,29 @@ import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
  */
 public class PlayerCar {
     World world;
+    CarInfo carInfo;
+    GameInput gameInput;
+
+    //Box2D related fields
     Body body;
     Array<Tire> tires = new Array<Tire>();
     RevoluteJoint leftJoint, rightJoint;
 
-    Box2DSprite sprite;
+    //Texture and sprite
     Texture texture;
+    Box2DSprite sprite;
 
-    GameInput gameInput;
-    private byte input = 0;
-
+    //Drive related fields
     float engineRPM = 0;
 
-    public PlayerCar(World world, GameInput gameInput) {
+    int input = 0; //To be replaced by gyroscope control
+
+    public PlayerCar(World world, CarInfo info, GameInput gameInput) {
+        this.world = world;
+        carInfo = info;
         this.gameInput = gameInput;
 
-        this.world = world;
-
+        //Box2D stuff
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(90,80);
@@ -76,25 +82,25 @@ public class PlayerCar {
         float frontTireMaxLateralImpulse = 0;
         */
 
-        Tire tire = new Tire(world);
+        Tire tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(-0.9f, -1.6f);
         world.createJoint(jointDef);
         tires.add(tire);
 
-        tire = new Tire(world);
+        tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(0.9f, -1.6f);
         world.createJoint(jointDef);
         tires.add(tire);
 
-        tire = new Tire(world);
+        tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(-0.9f, 1.6f);
         leftJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
 
-        tire = new Tire(world);
+        tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(0.9f, 1.6f);
         rightJoint = (RevoluteJoint)world.createJoint(jointDef);
@@ -139,9 +145,15 @@ public class PlayerCar {
 
         leftJoint.setLimits(newAngle, newAngle);
         rightJoint.setLimits(newAngle, newAngle);
-
     }
 
+    //Rendering
+    public void render(SpriteBatch batch)
+    {
+        sprite.draw(batch, world);
+    }
+
+    //Will be replaced by gyroscope control
     private void inputHandler() {
         input = 0;
 
@@ -162,10 +174,5 @@ public class PlayerCar {
 
         //Gdx.app.debug("Input", ((input & 1) == 1 ? "U" : "") + ((input & 2) == 2 ? "D" : "")
         //        + ((input & 4) == 4 ? "L" : "") + ((input & 8) == 8 ? "R" : ""));
-    }
-
-    public void render(SpriteBatch batch)
-    {
-        sprite.draw(batch, world);
     }
 }

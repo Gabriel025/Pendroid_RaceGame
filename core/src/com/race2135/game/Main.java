@@ -12,9 +12,10 @@ public class Main extends Game {
 	@Override
 	public void create () {
         Box2D.init();
+        CarInfo.init();
 
         menuScreen = new MainMenu(this);
-        playScreen = new PlayScreen(this);
+        playScreen = new PlayScreen(this, null);
 
         setScreen(menuScreen);
 	}
