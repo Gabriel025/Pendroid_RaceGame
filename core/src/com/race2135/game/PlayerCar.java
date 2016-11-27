@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -29,13 +28,13 @@ public class PlayerCar {
     Box2DSprite sprite;
     Texture texture;
 
-    HUD hud;
+    GameInput gameInput;
     private byte input = 0;
 
     float engineRPM = 0;
 
-    public PlayerCar(World world, HUD hud) {
-        this.hud = hud;
+    public PlayerCar(World world, GameInput gameInput) {
+        this.gameInput = gameInput;
 
         this.world = world;
 
@@ -107,7 +106,8 @@ public class PlayerCar {
 
         int driveRPM = 4500, idleRPM = 0;
 
-        engineRPM = MathUtils.lerp(engineRPM, (driveRPM - idleRPM) * hud.getThrottle() + idleRPM, 0.3f);
+        engineRPM = MathUtils.lerp(engineRPM,
+                (driveRPM - idleRPM) * gameInput.getThrottle() + idleRPM, 0.3f);
 
         Gdx.app.log("RPM", "" + engineRPM);
 

@@ -1,6 +1,5 @@
 package com.race2135.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,7 +23,7 @@ public class PlayScreen implements Screen {
     private Main game;
 
     PlayerCar playerCar;
-    HUD hud;
+    GameInput gameInput;
 
     SpriteBatch spriteBatch;
     Texture texture;
@@ -34,14 +33,14 @@ public class PlayScreen implements Screen {
         gamecam = new OrthographicCamera();
         viewport = new FillViewport(80, 60, gamecam);
 
-        hud = new HUD();
+        gameInput = new GameInput(7);
 
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
 
         spriteBatch = new SpriteBatch();
 
-        playerCar = new PlayerCar(world, hud);
+        playerCar = new PlayerCar(world, gameInput);
         playerCar.body.setTransform(105, 80, 0);
 
 
@@ -64,7 +63,7 @@ public class PlayScreen implements Screen {
     }
 
     public void show() {
-        Gdx.input.setInputProcessor(hud);
+        Gdx.input.setInputProcessor(gameInput);
     }
 
     public void update(float dt) {
@@ -93,13 +92,13 @@ public class PlayScreen implements Screen {
 
         b2dr.render(this.world, this.gamecam.combined);
 
-        hud.render(spriteBatch);
+        gameInput.render(spriteBatch);
     }
 
 
     public void resize(int width, int height) {
         viewport.update(width, height);
-        hud.resize(width, height);
+        gameInput.resize(width, height);
     }
 
     public void pause() { }
