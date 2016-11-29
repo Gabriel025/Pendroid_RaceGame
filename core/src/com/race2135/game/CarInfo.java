@@ -1,5 +1,6 @@
 package com.race2135.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
@@ -25,7 +26,8 @@ public class CarInfo {
     int mass;
 
     //Engine and gearbox
-    Sound engineSound;
+    String engineSoundPath;
+    int engineSoundRPM; //RPM of the enginne in the sound sample
     int idleRPM, powerRPM, maxRPM;
     int numGears;
     int[] gearRatios;
@@ -43,6 +45,34 @@ public class CarInfo {
     //Initializaton
     public static void init()
     {
+        models = new Array<CarInfo>();
+
         //TODO put some car definitions in here, and add them to the instance array
+        //TODO it might be a good idea to load these from a file if we implement more cars
+        CarInfo testCar = new CarInfo();
+        testCar.modelName = "Test";
+        testCar.modelDescription = "Just a test model.";
+
+        testCar.bodyTexture = new Texture("car.png");
+        //testCar.tireTexture = new Texture("");
+
+        //testCar.width = ;
+        //testCar.length = ;
+        //testCar.tireDiameter = ;
+        //testCar.tireThickness = ;
+        //testCar.mass = ;
+
+        testCar.engineSoundPath = "test_engine.wav";
+        testCar.engineSoundRPM = 900;
+
+        //testCar.idleRPM = ;
+        //testCar.powerRPM = ;
+        //testCar.maxRPM = ;
+        testCar.numGears = 7;
+        //testCar.gearRatios = {};
+
+        testCar.is4x4 = true;
+
+        models.add(testCar);
     }
 }
