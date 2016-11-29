@@ -2,6 +2,7 @@ package com.race2135.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -35,6 +36,8 @@ public class PlayerCar {
 
     //Drive related fields
     float engineRPM = 0;
+    Sound engineSound;
+    long engineSoundID;
 
     int input = 0; //To be replaced by gyroscope control
 
@@ -42,6 +45,9 @@ public class PlayerCar {
         this.world = world;
         carInfo = info;
         this.gameInput = gameInput;
+
+        engineSound = Gdx.audio.newSound(Gdx.files.internal(carInfo.engineSoundPath));
+        engineSoundID = engineSound.loop();
 
         //Box2D stuff
         BodyDef bodyDef = new BodyDef();
@@ -115,7 +121,8 @@ public class PlayerCar {
         engineRPM = MathUtils.lerp(engineRPM,
                 (driveRPM - idleRPM) * gameInput.getThrottle() + idleRPM, 0.3f);
 
-        Gdx.app.log("RPM", "" + engineRPM);
+        engineSound.setPitch(engineSoundID, engineRPM / carInfo.engineSoundRPM);
+        //Gdx.app.log("RPM", "" + engineRPM);
 
         for (Tire tire : tires) {
             tire.updateDrive(engineRPM);
