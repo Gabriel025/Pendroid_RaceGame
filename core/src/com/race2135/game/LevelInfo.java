@@ -1,5 +1,6 @@
 package com.race2135.game;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 /**
@@ -12,6 +13,9 @@ public class LevelInfo {
     public String levelPath;
     public int levelScale;
     public String bodyName;
+
+    public Vector2 roundPivot; //A point around which the car turns a full 360° upon
+                               //level completion.
 
     //TODO add start position
 
