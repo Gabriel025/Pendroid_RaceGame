@@ -2,14 +2,13 @@ package com.race2135.game;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -118,7 +117,7 @@ public class GameInput implements InputProcessor {
         return throttle;
     }
     public float getBraking() {
-        return brake;
+        return brake * 0.9f + 0.1f; // Engine braking, specified by the exercise
     }
     public int getGear() {
         return gear;
@@ -235,7 +234,36 @@ public class GameInput implements InputProcessor {
     //Unused interface methods
     @Override
     public boolean keyDown(int keycode) {
-        return false;
+        switch(keycode)
+        {
+            case Input.Keys.R:
+                gear = -1;
+                break;
+            case Input.Keys.NUM_0:
+                gear = 0;
+                break;
+            case Input.Keys.NUM_1:
+                gear = 1;
+                break;
+            case Input.Keys.NUM_2:
+                gear = 2;
+                break;
+            case Input.Keys.NUM_3:
+                gear = 3;
+                break;
+            case Input.Keys.NUM_4:
+                gear = 4;
+                break;
+            case Input.Keys.NUM_5:
+                gear = 5;
+                break;
+            default:
+                break;
+        }
+
+        update();
+
+        return true;
     }
 
     @Override
