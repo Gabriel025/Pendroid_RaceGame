@@ -14,6 +14,7 @@ public class LevelInfo {
     public int levelScale;
     public String bodyName;
 
+    public Vector2 startPosition;
     public Vector2 roundPivot; //A point around which the car turns a full 360° upon
                                //level completion.
 
@@ -38,6 +39,9 @@ public class LevelInfo {
         testTrack.levelPath = "map_physics1.json";
         testTrack.levelScale = 400;
         testTrack.bodyName = "Name";
+
+        testTrack.startPosition = new Vector2(250, 80);
+        testTrack.roundPivot = new Vector2(235, 80);
 
         levels.add(testTrack);
     }
