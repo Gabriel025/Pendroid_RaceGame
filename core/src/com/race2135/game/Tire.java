@@ -17,34 +17,8 @@ public class Tire {
     private World world;
     CarInfo carInfo;
     Body body;
-    /*public enum Direction{up, down, right, left, stop};
-    Direction direction = Direction.stop;*/
 
-    //For further information, search for "bit fields"
     public static final byte DIR_UP = 1, DIR_DOWN = 2, DIR_LEFT = 4, DIR_RIGHT = 8;
-    //public byte direction = 0;
-
-    //float maxForwardSpeed, maxBackwardSpeed, maxDriveForce, maxLateralImpulse;
-
-
-   /* public void __Tire(World world) {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        body = world.createBody(bodyDef);
-
-        PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(0.02f, 0.03f);
-
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.density = 1;
-        fixtureDef.shape = polygonShape;
-        fixtureDef.isSensor = true;
-       /* fixtureDef.filter.categoryBits = Constants.TIRE;
-        fixtureDef.filter.maskBits  = Constants.GROUND;
-        Fixture fixture = body.createFixture(fixtureDef);
-
-        body.setUserData(this);
-    }*/
 
     public Tire(World world, CarInfo info) {
         this.world = world;
@@ -55,7 +29,7 @@ public class Tire {
         body = world.createBody(bodyDef);
 
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(0.10f, 0.325f);
+        polygonShape.setAsBox(carInfo.tireThickness / 2, carInfo.tireDiameter / 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
@@ -63,15 +37,6 @@ public class Tire {
         fixtureDef.isSensor = true;
         Fixture fixture = body.createFixture(fixtureDef);
     }
-
-    /*
-    public void setValues(float a, float b, float c, float d){
-        maxForwardSpeed = a;
-        maxBackwardSpeed = b;
-        maxDriveForce = c;
-        maxLateralImpulse = d;
-    }
-    */
 
     Vector2 getForwardVelocity() {
         Vector2 result = body.getWorldVector(new Vector2(0, 1)); //Forw. normal
@@ -87,7 +52,7 @@ public class Tire {
         return result;
     }
 
-    public void updateDrive(float driveRPM) {
+    public void updateDrive(float driveTorque) {
         /*
         float speed = getForwardVelocity().len();
 
@@ -107,16 +72,15 @@ public class Tire {
         body.applyForceToCenter(driveForce, true);
         */
 
-        //TODO: "0.325f" is the tire diameter, it should be customizable later on
-
         Vector2 driveForce = body.getWorldVector(new Vector2(0, 1));
-        driveForce.scl((0.325f * MathUtils.PI) / 60 * driveRPM);
+        driveForce.scl(carInfo.tireDiameter / 2 * driveTorque);
 
-        body.applyForceToCenter(driveForce, true);
+        body.applyLinearImpulse(driveForce, body.getWorldCenter(), true);
+        //body.applyForceToCenterToCenter(driveForce, true);
     }
 
-    public void updateFriction() {
-        Vector2 impulse = getLateralVelocity().scl(-0.2f);
+    public void updateFriction(float brake) {
+        Vector2 impulse = getLateralVelocity().scl(-0.2f * carInfo.mass);
 
         body.applyForceToCenter(impulse, true);
         //body.applyAngularImpulse(0.1f * body.getInertia() * -body.getAngularVelocity(), true);
