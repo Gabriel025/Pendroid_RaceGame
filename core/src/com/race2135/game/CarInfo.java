@@ -22,15 +22,14 @@ public class CarInfo {
 
     //Appearance, dimensions, ...
     Texture bodyTexture, tireTexture;
-    int width, length, tireDiameter, tireThickness;
-    int mass;
+    float width, length, tireDiameter, tireThickness;
+    float mass;
 
     //Engine and gearbox
     String engineSoundPath;
-    int engineSoundRPM; //RPM of the enginne in the sound sample
-    int idleRPM, powerRPM, maxRPM;
+    int engineSoundRPM; //RPM of the engine in the sound sample
     int numGears;
-    int[] gearRatios;
+    float[] gearRatios;
 
     //Tires
     boolean is4x4;
@@ -56,20 +55,17 @@ public class CarInfo {
         testCar.bodyTexture = new Texture("car.png");
         //testCar.tireTexture = new Texture("");
 
-        //testCar.width = ;
-        //testCar.length = ;
-        //testCar.tireDiameter = ;
-        //testCar.tireThickness = ;
-        //testCar.mass = ;
+        testCar.width = 1.8f;
+        testCar.length = 4f;
+        testCar.tireDiameter = 0.65f;
+        testCar.tireThickness = 0.2f;
+        testCar.mass = 1400f;
 
         testCar.engineSoundPath = "test_engine.wav";
         testCar.engineSoundRPM = 900;
 
-        //testCar.idleRPM = ;
-        //testCar.powerRPM = ;
-        //testCar.maxRPM = ;
         testCar.numGears = 7;
-        //testCar.gearRatios = {};
+        testCar.gearRatios = new float[]{-1f / 2.285f, 0f,1f / 2.774f, 1f / 1.974f, 1f / 1.534f, 1f, 1f / 0.756f};
 
         testCar.is4x4 = true;
 
