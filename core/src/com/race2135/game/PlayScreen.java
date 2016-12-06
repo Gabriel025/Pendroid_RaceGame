@@ -26,6 +26,9 @@ public class PlayScreen implements Screen {
     LevelInfo levelInfo;
 
     PlayerCar playerCar;
+    float deltaAngle = 0;
+    Vector2 carPrevPos;
+
     GameInput gameInput;
 
     SpriteBatch spriteBatch;
@@ -46,8 +49,8 @@ public class PlayScreen implements Screen {
 
         spriteBatch = new SpriteBatch();
 
-        playerCar = new PlayerCar(world, carInfo, gameInput);
-        playerCar.body.setTransform(105, 80, 0);
+        playerCar = new PlayerCar(world, carInfo, levelInfo.startPosition, 0, gameInput);
+        carPrevPos = playerCar.body.getPosition();
 
 
         texture = new Texture(Gdx.files.internal("race.png"));
@@ -76,6 +79,19 @@ public class PlayScreen implements Screen {
         playerCar.update();
 
         world.step(1f/60f, 6, 2);
+
+        //cpy()... just Java shenanigans
+        Vector2 carPos = playerCar.body.getPosition().cpy();
+        carPos.sub(levelInfo.roundPivot);
+        carPrevPos.sub(levelInfo.roundPivot);
+
+        //Vector2.angle(Vector2) returns angle with wrong sign, apparently? (Thus the "-=")
+        deltaAngle -= carPos.angle(carPrevPos);
+
+        carPrevPos = playerCar.body.getPosition().cpy();
+
+        if(deltaAngle >= 360f) Gdx.app.log("Level finished!", "" + deltaAngle);
+        else Gdx.app.log("Angle", "" + deltaAngle);
     }
 
     public void render(float delta) {
