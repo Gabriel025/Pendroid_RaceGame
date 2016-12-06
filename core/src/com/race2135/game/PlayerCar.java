@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -41,7 +42,7 @@ public class PlayerCar {
 
     int input = 0; //To be replaced by gyroscope control
 
-    public PlayerCar(World world, CarInfo info, GameInput gameInput) {
+    public PlayerCar(World world, CarInfo info, Vector2 position, float angle, GameInput gameInput) {
         this.world = world;
         carInfo = info;
         this.gameInput = gameInput;
@@ -52,18 +53,18 @@ public class PlayerCar {
         //Box2D stuff
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(90,80);
-        bodyDef.angle = 0;
+        bodyDef.position.set(position);
+        bodyDef.angle = angle;
 
         body = world.createBody(bodyDef);
         body.setAngularDamping(3);
 
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(0.9f, 2);
+        polygonShape.setAsBox(carInfo.width / 2, carInfo.length / 2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
-        fixtureDef.density = 0.2f;
+        fixtureDef.density = carInfo.mass / (carInfo.width * carInfo.length);
         fixtureDef.friction = 1;
 
         texture = new Texture(Gdx.files.internal("car.png"));
@@ -78,15 +79,6 @@ public class PlayerCar {
         jointDef.lowerAngle = 0;
         jointDef.upperAngle = 0;
         jointDef.localAnchorB.setZero();
-
-        /*
-        float maxForwardSpeed = 120;
-        float maxBackwardSpeed = -20;
-        float backTireMaxDriveForce = 30;
-        float frontTireMaxDriveForce = 0;
-        float backTireMaxLateralImpulse = 0;
-        float frontTireMaxLateralImpulse = 0;
-        */
 
         Tire tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
@@ -116,20 +108,23 @@ public class PlayerCar {
     public void update() {
         inputHandler();
 
-        int driveRPM = 4500, idleRPM = 0;
+        int driveRPM = 4500, idleRPM = 900;
 
         engineRPM = MathUtils.lerp(engineRPM,
-                (driveRPM - idleRPM) * gameInput.getThrottle() + idleRPM, 0.3f);
+                (driveRPM - idleRPM) * gameInput.getThrottle() + idleRPM, 0.03f);
 
         engineSound.setPitch(engineSoundID, engineRPM / carInfo.engineSoundRPM);
+
+        float engineTorque = simpleTorqueCurve(engineRPM);
+
         //Gdx.app.log("RPM", "" + engineRPM);
 
         for (Tire tire : tires) {
-            tire.updateDrive(engineRPM);
-            tire.updateFriction();
+            tire.updateDrive(engineTorque * carInfo.gearRatios[gameInput.getGear() + 1]);
+            tire.updateFriction(gameInput.getBraking());
         }
 
-        float lockAngle = 50 * MathUtils.degreesToRadians;
+        float lockAngle = 20 * MathUtils.degreesToRadians;
         float turnSpeed = 80 * MathUtils.degreesToRadians;
         float turnPerStep = turnSpeed / 60.0f;
         float desiredAngle = 0;
@@ -181,5 +176,12 @@ public class PlayerCar {
 
         //Gdx.app.debug("Input", ((input & 1) == 1 ? "U" : "") + ((input & 2) == 2 ? "D" : "")
         //        + ((input & 4) == 4 ? "L" : "") + ((input & 8) == 8 ? "R" : ""));
+    }
+
+    float simpleTorqueCurve(float RPM)
+    {
+        if(RPM < 900f) return MathUtils.lerp(0f, 220f, RPM / 900f);
+        if(RPM < 4500f) return MathUtils.lerp(220f, 310f, (RPM - 900f) / 4500f);
+        return MathUtils.lerp(310f, 200f, (RPM - 4500f) / 7500f);
     }
 }
