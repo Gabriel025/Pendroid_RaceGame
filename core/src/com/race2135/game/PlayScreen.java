@@ -40,12 +40,13 @@ public class PlayScreen implements Screen {
         this.levelInfo = levelInfo;
 
         gamecam = new OrthographicCamera();
-        viewport = new FillViewport(80, 60, gamecam);
+        viewport = new FillViewport(40, 30, gamecam);
 
         gameInput = new GameInput(7);
 
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
+        //b2dr.setDrawVelocities(true);
 
         spriteBatch = new SpriteBatch();
 
@@ -64,7 +65,7 @@ public class PlayScreen implements Screen {
         FixtureDef fd = new FixtureDef();
         fd.density = 1;
         fd.friction = 0.5f;
-        fd.restitution = 0.3f;
+        fd.restitution = 0.1f;
 
         Body body = world.createBody(bd);
 
@@ -90,8 +91,8 @@ public class PlayScreen implements Screen {
 
         carPrevPos = playerCar.body.getPosition().cpy();
 
-        if(deltaAngle >= 360f) Gdx.app.log("Level finished!", "" + deltaAngle);
-        else Gdx.app.log("Angle", "" + deltaAngle);
+        //if(deltaAngle >= 360f) Gdx.app.log("Level finished!", "" + deltaAngle);
+        //else Gdx.app.log("Angle", "" + deltaAngle);
     }
 
     public void render(float delta) {
