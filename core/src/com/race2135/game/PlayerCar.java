@@ -68,6 +68,7 @@ public class PlayerCar {
         fixtureDef.friction = 1;
 
         texture = new Texture(Gdx.files.internal("car.png"));
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         sprite = new Box2DSprite(texture);
 
         body.setUserData(sprite);
@@ -82,34 +83,37 @@ public class PlayerCar {
 
         Tire tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(-0.9f, -1.6f);
+        jointDef.localAnchorA.set(-0.85f, -1.35f);
         world.createJoint(jointDef);
         tires.add(tire);
 
         tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(0.9f, -1.6f);
+        jointDef.localAnchorA.set(0.85f, -1.35f);
         world.createJoint(jointDef);
         tires.add(tire);
 
         tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(-0.9f, 1.6f);
+        jointDef.localAnchorA.set(-0.85f, 1.35f);
         leftJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
 
         tire = new Tire(world, carInfo);
         jointDef.bodyB = tire.body;
-        jointDef.localAnchorA.set(0.9f, 1.6f);
+        jointDef.localAnchorA.set(0.85f, 1.35f);
         rightJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
     }
 
     public void update() {
-        int maxRPM = 7200, idleRPM = 900;
+        float maxRPM = 4500, idleRPM = 900;
+        if(carInfo.gearRatios[gameInput.getGear() + 1] != 0)
+            maxRPM /= carInfo.gearRatios[gameInput.getGear() + 1];
+        if(maxRPM < 0) maxRPM = -maxRPM;
 
         engineRPM = MathUtils.lerp(engineRPM,
-                (maxRPM - idleRPM) * gameInput.getThrottle()* carInfo.gearRatios[gameInput.getGear() + 1] + idleRPM, 0.03f);
+                (maxRPM - idleRPM) * gameInput.getThrottle() + idleRPM, 0.02f);
 
         if(engineSoundLowID == -1) engineSoundLowID = engineSoundLow.loop();
         if(engineSoundHighID == -1) engineSoundHighID = engineSoundHigh.loop();
@@ -133,8 +137,8 @@ public class PlayerCar {
         //Gdx.app.log("RPM", "" + engineRPM);
 
         for (Tire tire : tires) {
-            tire.updateDrive(engineTorque * carInfo.gearRatios[gameInput.getGear() + 1]);
-            tire.updateFriction(gameInput.getBraking());
+            tire.update(engineTorque * carInfo.gearRatios[gameInput.getGear() + 1],
+                    gameInput.getBraking());
         }
 
         /*
@@ -163,6 +167,9 @@ public class PlayerCar {
     //Rendering
     public void render(SpriteBatch batch)
     {
+        for(Tire tire : tires)
+            tire.render(batch);
+
         sprite.draw(batch, world);
     }
 
