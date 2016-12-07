@@ -1,6 +1,7 @@
 package com.race2135.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -10,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
+
 /**
  * Created by Adam on 2016. 10. 31..
  */
@@ -18,7 +21,7 @@ public class Tire {
     CarInfo carInfo;
     Body body;
 
-    public static final byte DIR_UP = 1, DIR_DOWN = 2, DIR_LEFT = 4, DIR_RIGHT = 8;
+    Box2DSprite sprite;
 
     public Tire(World world, CarInfo info) {
         this.world = world;
@@ -36,6 +39,9 @@ public class Tire {
         fixtureDef.density = 1;
         fixtureDef.isSensor = true;
         Fixture fixture = body.createFixture(fixtureDef);
+
+        sprite = new Box2DSprite(Main.black);
+        body.setUserData(sprite);
     }
 
     Vector2 getForwardVelocity() {
@@ -52,64 +58,25 @@ public class Tire {
         return result;
     }
 
-    public void updateDrive(float driveTorque) {
-        /*
-        float speed = getForwardVelocity().len();
+    public void update(float driveTorque, float brake) {
+        Vector2 force = getLateralVelocity().scl(-0.5f * carInfo.mass); //Lateral friction
+        body.applyForceToCenter(force, true);
 
-        Vector2 driveForce = body.getWorldVector(new Vector2(0, 1));
+        force = getForwardVelocity().scl(-0.5f * brake * carInfo.mass); //Braking
+        body.applyForceToCenter(force, true);
 
-        switch(direction & (DIR_UP | DIR_DOWN)) {
-            case DIR_UP:
-                driveForce.scl(maxDriveForce);
-                break;
-            case DIR_DOWN:
-                driveForce.scl(-maxDriveForce);
-                break;
-            default:
-                return;
-        }
+        force = body.getWorldVector(new Vector2(0, 1)); //Engine drive
+        force.scl(carInfo.tireDiameter / 2 * driveTorque);
 
-        body.applyForceToCenter(driveForce, true);
-        */
-
-        Vector2 driveForce = body.getWorldVector(new Vector2(0, 1));
-        driveForce.scl(carInfo.tireDiameter / 2 * driveTorque);
-
-        body.applyLinearImpulse(driveForce, body.getWorldCenter(), true);
+        body.applyLinearImpulse(force, body.getWorldCenter(), true);
         //body.applyForceToCenterToCenter(driveForce, true);
-    }
 
-    public void updateFriction(float brake) {
-        Vector2 impulse = getLateralVelocity().scl(-0.5f * carInfo.mass);
-
-        body.applyForceToCenter(impulse, true);
         //body.applyAngularImpulse(0.1f * body.getInertia() * -body.getAngularVelocity(), true);
         //body.applyTorque(0.1f * body.getInertia() * -body.getAngularVelocity(), true);
-
-        //Vector2 dragForce = getForwardVelocity().scl(-0.5f * brake * carInfo.mass);
-
-        //body.applyForceToCenter(dragForce, true);
-
-        Vector2 dragForce = getForwardVelocity().scl(-0.05f * brake);
-
-        body.applyLinearImpulse(dragForce, body.getWorldCenter(), true);
     }
 
-    /*
-    public void updateTurn() {
-        float desiredTorque = 0;
-
-        switch(direction & (DIR_LEFT | DIR_RIGHT)){
-            case DIR_LEFT:
-                desiredTorque = 15;
-                break;
-            case DIR_RIGHT:
-                desiredTorque = -15;
-                break;
-            default:
-                return;
-        }
-        body.applyTorque(desiredTorque, true);
+    public void render(SpriteBatch batch)
+    {
+        sprite.draw(batch, world);
     }
-    */
 }
