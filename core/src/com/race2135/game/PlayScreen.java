@@ -13,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -35,6 +37,9 @@ public class PlayScreen implements Screen {
     SpriteBatch spriteBatch;
     Texture texture;
 
+    long time;
+    boolean started = false;
+
     public PlayScreen(Game game, CarInfo carInfo, LevelInfo levelInfo) {
         this.game = game;
         this.carInfo = carInfo;
@@ -43,7 +48,7 @@ public class PlayScreen implements Screen {
         gamecam = new OrthographicCamera();
         viewport = new FillViewport(40, 30, gamecam);
 
-        gameInput = new GameInput(7);
+        gameInput = new GameInput(carInfo.numGears);
 
         world = new World(new Vector2(0, 0), true);
         b2dr = new Box2DDebugRenderer();
@@ -56,6 +61,7 @@ public class PlayScreen implements Screen {
 
 
         texture = new Texture(Gdx.files.internal(levelInfo.levelTexture));
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         BodyLoader bodyLoader = new BodyLoader(Gdx.files.internal(levelInfo.levelPath));
 
@@ -75,6 +81,7 @@ public class PlayScreen implements Screen {
 
     public void show() {
         Gdx.input.setInputProcessor(gameInput);
+        time = TimeUtils.millis() + 3000;
     }
 
     public void update(float dt) {
