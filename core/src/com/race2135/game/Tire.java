@@ -80,15 +80,19 @@ public class Tire {
     }
 
     public void updateFriction(float brake) {
-        Vector2 impulse = getLateralVelocity().scl(-0.2f * carInfo.mass);
+        Vector2 impulse = getLateralVelocity().scl(-0.5f * carInfo.mass);
 
         body.applyForceToCenter(impulse, true);
         //body.applyAngularImpulse(0.1f * body.getInertia() * -body.getAngularVelocity(), true);
         //body.applyTorque(0.1f * body.getInertia() * -body.getAngularVelocity(), true);
 
-        Vector2 dragForce = getForwardVelocity().scl(-0.05f);
+        //Vector2 dragForce = getForwardVelocity().scl(-0.5f * brake * carInfo.mass);
 
-        body.applyForceToCenter(dragForce, true);
+        //body.applyForceToCenter(dragForce, true);
+
+        Vector2 dragForce = getForwardVelocity().scl(-0.05f * brake);
+
+        body.applyLinearImpulse(dragForce, body.getWorldCenter(), true);
     }
 
     /*
