@@ -58,6 +58,9 @@ public class GameInput implements InputProcessor {
     //Number of gears (including R and N)
     int numGears;
 
+    private boolean gearIsDragging = false;
+    private int dragTouchPointer;
+
     //Processed user input
     private float throttle, brake;
     private int gear = 0; //-1 is reverse, 0 is neutral, ...
@@ -114,13 +117,13 @@ public class GameInput implements InputProcessor {
 
     //User input accessors
     public float getThrottle() {
-        return throttle;
+        return (gearIsDragging ? 0 : throttle);
     }
     public float getBraking() {
         return brake * 0.9f + 0.1f; // Engine braking, specified by the exercise
     }
     public int getGear() {
-        return gear;
+        return (gearIsDragging ? 0 : gear);
     }
 
     //Update method (called by input event methods)
@@ -128,13 +131,58 @@ public class GameInput implements InputProcessor {
     {
         //Processing touch data
         throttle = brake = 0;
+        Touch dragTouch = null;
         for(Touch touch : touchArray)
         {
             if(spriteGasBkg.getBoundingRectangle().contains(touch.x, touch.y))
                 throttle = (touch.y - spriteGasBkg.getY()) / spriteGasBkg.getHeight();
             else if(spriteBrakeBkg.getBoundingRectangle().contains(touch.x, touch.y))
                 brake = (touch.y - spriteBrakeBkg.getY()) / spriteBrakeBkg.getHeight();
+            else if(!gearIsDragging)
+                {
+                    if(spriteGearKnob.getBoundingRectangle().contains(touch.x, touch.y))
+                    {
+                        gearIsDragging = true;
+                        dragTouchPointer = touch.pointer;
+                    }
+                }
 
+            if(touch.pointer == dragTouchPointer) dragTouch = touch;
+        }
+
+        if(gearIsDragging)
+        {
+            if(dragTouch != null)
+            {
+                float y = dragTouch.y;
+                y = MathUtils.clamp(y,
+                        (1f - (float) (gear + 1 + 1) / (numGears - 1))
+                                * (screenHeight - spriteGearKnob.getHeight()),
+                        (1f - (float) (gear + 1 - 1) / (numGears - 1))
+                                * (screenHeight - spriteGearKnob.getHeight()));
+
+                spriteGearKnob.setY(y);
+            }
+            else
+            {
+                gearIsDragging = false;
+                float y = spriteGearKnob.getY();
+                y -= (1f - (float) (gear + 1) / (numGears - 1))
+                        * (screenHeight - spriteGearKnob.getHeight());
+                y /= (screenHeight - spriteGearKnob.getHeight()) / (numGears - 1);
+
+
+                if(y > 0.5) gear--;
+                if(y <= -0.5) gear++;
+
+                spriteGearKnob.setY((1f - (float)(gear + 1) / (numGears - 1))
+                        * (screenHeight - spriteGearKnob.getHeight()));
+            }
+        }
+        else
+        {
+            spriteGearKnob.setY((1f - (float)(gear + 1) / (numGears - 1))
+                    * (screenHeight - spriteGearKnob.getHeight()));
         }
 
         //Updating sprite positions
@@ -143,8 +191,6 @@ public class GameInput implements InputProcessor {
         spriteBrakePedal.setY(spriteBrakeBkg.getY()
                 + (spriteBrakeBkg.getHeight() - spriteBrakePedal.getHeight()) * brake);
 
-        spriteGearKnob.setY((1f - (float)(gear + 1) / (numGears - 1))
-                * (screenHeight - spriteGearKnob.getHeight()));
         //Gdx.app.log("Pedals", "Gas: " + throttle + "; Brake: " + brake);
     }
 
@@ -176,17 +222,19 @@ public class GameInput implements InputProcessor {
         screenWidth = width;
         screenHeight = height;
 
-        //Updating sprite positions
-        spriteGasBkg.setPosition(100, screenHeight - 100);
-        spriteGasPedal.setX(spriteGasBkg.getX());
+        //Updating sprite dimensions and positions
+        float pedalSize = (float)screenHeight / 3;
 
-        spriteBrakeBkg.setPosition(0, screenHeight - 100);
-        spriteBrakePedal.setX(spriteBrakeBkg.getX());
+        spriteGasBkg.setBounds(pedalSize, screenHeight - pedalSize, pedalSize, pedalSize);
+        spriteGasPedal.setBounds(pedalSize, 0, pedalSize,
+                pedalSize * texGasPedal.getHeight() / texGasPedal.getWidth());
 
-        spriteGearBkg.setPosition(screenWidth * 29 / 30, 0);
-        spriteGearBkg.setSize(screenWidth / 30, screenHeight);
-        spriteGearKnob.setX(spriteGearBkg.getX());
-        spriteGearKnob.setSize(screenWidth / 30, screenWidth / 30);
+        spriteBrakeBkg.setBounds(0, screenHeight - pedalSize, pedalSize, pedalSize);
+        spriteBrakePedal.setBounds(0, 0, pedalSize,
+                pedalSize * texGasPedal.getHeight() / texGasPedal.getWidth());
+
+        spriteGearBkg.setBounds(screenWidth * 29 / 30, 0, screenWidth / 30, screenHeight);
+        spriteGearKnob.setBounds(spriteGearBkg.getX(), 0, screenWidth / 30, screenWidth / 30);
 
         update();
 
