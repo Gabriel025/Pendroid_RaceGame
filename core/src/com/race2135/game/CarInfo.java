@@ -24,6 +24,7 @@ public class CarInfo {
     Texture bodyTexture, tireTexture;
     float width, length, tireDiameter, tireThickness;
     float mass;
+    public float speed;
 
     //Engine and gearbox
     String engineSoundPath;
@@ -51,6 +52,7 @@ public class CarInfo {
         CarInfo testCar = new CarInfo();
         testCar.modelName = "Test";
         testCar.modelDescription = "Just a test model.";
+        testCar.speed = 120;
 
         testCar.bodyTexture = new Texture("car.png");
         //testCar.tireTexture = new Texture("");
@@ -70,5 +72,16 @@ public class CarInfo {
         testCar.is4x4 = true;
 
         models.add(testCar);
+
+        CarInfo ferrari = new CarInfo();
+        ferrari.modelName = "Ferrari";
+        ferrari.modelDescription = "'The fastest...'";
+        ferrari.bodyTexture = new Texture("cars/ferrari.png");
+        ferrari.speed = 320;
+
+
+        models.add(ferrari);
+
+        //MISSING INFOS
     }
 }
