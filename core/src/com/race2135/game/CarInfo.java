@@ -26,8 +26,8 @@ public class CarInfo {
     float mass;
 
     //Engine and gearbox
-    String engineSoundPath;
-    int engineSoundRPM; //RPM of the engine in the sound sample
+    String engineSoundLowPath, engineSoundHighPath;
+    int engineSoundLowRPM,  engineSoundHighRPM; //RPM of the engine in the sound samples
     int numGears;
     float[] gearRatios;
 
@@ -61,8 +61,10 @@ public class CarInfo {
         testCar.tireThickness = 0.2f;
         testCar.mass = 1400f;
 
-        testCar.engineSoundPath = "test_engine.wav";
-        testCar.engineSoundRPM = 900;
+        testCar.engineSoundLowPath = "test_engine_low.wav";
+        testCar.engineSoundLowRPM = 900;
+        testCar.engineSoundHighPath = "test_engine_high.wav";
+        testCar.engineSoundHighRPM = 3600;
 
         testCar.numGears = 7;
         testCar.gearRatios = new float[]{-1f / 2.285f, 0f,1f / 2.774f, 1f / 1.974f, 1f / 1.534f, 1f, 1f / 0.756f};
