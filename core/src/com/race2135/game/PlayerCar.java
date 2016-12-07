@@ -18,6 +18,8 @@ import com.badlogic.gdx.utils.Array;
 
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
+import static com.badlogic.gdx.Gdx.input;
+
 /**
  * Created by Adam on 2016. 11. 01.
  */
@@ -37,18 +39,16 @@ public class PlayerCar {
 
     //Drive related fields
     float engineRPM = 0;
-    Sound engineSound;
-    long engineSoundID;
-
-    int input = 0; //To be replaced by gyroscope control
+    Sound engineSoundLow, engineSoundHigh;
+    long engineSoundLowID = -1, engineSoundHighID = -1;
 
     public PlayerCar(World world, CarInfo info, Vector2 position, float angle, GameInput gameInput) {
         this.world = world;
         carInfo = info;
         this.gameInput = gameInput;
 
-        engineSound = Gdx.audio.newSound(Gdx.files.internal(carInfo.engineSoundPath));
-        engineSoundID = engineSound.loop();
+        engineSoundLow = Gdx.audio.newSound(Gdx.files.internal(carInfo.engineSoundLowPath));
+        engineSoundHigh = Gdx.audio.newSound(Gdx.files.internal(carInfo.engineSoundHighPath));
 
         //Box2D stuff
         BodyDef bodyDef = new BodyDef();
@@ -106,14 +106,27 @@ public class PlayerCar {
     }
 
     public void update() {
-        inputHandler();
-
-        int driveRPM = 4500, idleRPM = 900;
+        int maxRPM = 7200, idleRPM = 900;
 
         engineRPM = MathUtils.lerp(engineRPM,
-                (driveRPM - idleRPM) * gameInput.getThrottle() + idleRPM, 0.03f);
+                (maxRPM - idleRPM) * gameInput.getThrottle()* carInfo.gearRatios[gameInput.getGear() + 1] + idleRPM, 0.03f);
 
-        engineSound.setPitch(engineSoundID, engineRPM / carInfo.engineSoundRPM);
+        if(engineSoundLowID == -1) engineSoundLowID = engineSoundLow.loop();
+        if(engineSoundHighID == -1) engineSoundHighID = engineSoundHigh.loop();
+        //Pich has to be in the range of [0.5f; 2f], so two sounds are needed
+        if(engineRPM < carInfo.engineSoundLowRPM * 2)
+        {
+            engineSoundLow.setVolume(engineSoundLowID, (gameInput.getThrottle() + 1) / 2);
+            engineSoundLow.setPitch(engineSoundLowID, engineRPM / carInfo.engineSoundLowRPM);
+
+            engineSoundHigh.setVolume(engineSoundHighID, 0);
+        } else
+        {
+            engineSoundHigh.setVolume(engineSoundHighID, (gameInput.getThrottle() + 1) / 2);
+            engineSoundHigh.setPitch(engineSoundHighID, engineRPM / carInfo.engineSoundHighRPM);
+
+            engineSoundLow.setVolume(engineSoundLowID, 0);
+        }
 
         float engineTorque = simpleTorqueCurve(engineRPM);
 
@@ -124,58 +137,33 @@ public class PlayerCar {
             tire.updateFriction(gameInput.getBraking());
         }
 
+        /*
         float lockAngle = 20 * MathUtils.degreesToRadians;
         float turnSpeed = 80 * MathUtils.degreesToRadians;
         float turnPerStep = turnSpeed / 60.0f;
         float desiredAngle = 0;
 
-        switch (input & (Tire.DIR_LEFT | Tire.DIR_RIGHT)) {
-            case Tire.DIR_LEFT:
-                desiredAngle = lockAngle;
-                break;
-            case Tire.DIR_RIGHT:
-                desiredAngle = -lockAngle;
-                break;
-            default:
-                break;
-        }
-
         float angleNow = leftJoint.getJointAngle();
         float angleToTurn = desiredAngle - angleNow;
         angleToTurn = Math.max(-turnPerStep, Math.min(angleToTurn, turnPerStep));
         float newAngle = angleNow + angleToTurn;
+        */
 
-        leftJoint.setLimits(newAngle, newAngle);
-        rightJoint.setLimits(newAngle, newAngle);
+        Vector2 acc = new Vector2(Gdx.input.getAccelerometerX(), Gdx.input.getAccelerometerY());
+
+        float angle = -acc.angleRad() / 2;
+
+        if(angle <= -180) angle += 360;
+        angle = MathUtils.clamp(angle, -45, 45);
+
+        leftJoint.setLimits(angle, angle);
+        rightJoint.setLimits(angle, angle);
     }
 
     //Rendering
     public void render(SpriteBatch batch)
     {
         sprite.draw(batch, world);
-    }
-
-    //Will be replaced by gyroscope control
-    private void inputHandler() {
-        input = 0;
-
-        if(Gdx.input.isKeyPressed(Input.Keys.UP))
-            input |= Tire.DIR_UP;
-
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            input |= Tire.DIR_DOWN;
-
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
-            input |= Tire.DIR_RIGHT;
-
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            input |= Tire.DIR_LEFT;
-
-        //for (Tire tire : tires)
-        //    tire.direction = input;
-
-        //Gdx.app.debug("Input", ((input & 1) == 1 ? "U" : "") + ((input & 2) == 2 ? "D" : "")
-        //        + ((input & 4) == 4 ? "L" : "") + ((input & 8) == 8 ? "R" : ""));
     }
 
     float simpleTorqueCurve(float RPM)
