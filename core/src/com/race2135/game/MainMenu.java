@@ -61,7 +61,7 @@ public class MainMenu implements Screen {
         textButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 textButton.setText("Starting new game");
-                game.setScreen(game.carSelectionScreen);
+                game.setScreen(new CarSelectionMenu(game));
 
             }
         });
