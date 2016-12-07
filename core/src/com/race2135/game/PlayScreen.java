@@ -1,5 +1,6 @@
 package com.race2135.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,7 +22,7 @@ public class PlayScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
-    private Main game;
+    private Game game;
     CarInfo carInfo;
     LevelInfo levelInfo;
 
@@ -34,7 +35,7 @@ public class PlayScreen implements Screen {
     SpriteBatch spriteBatch;
     Texture texture;
 
-    public PlayScreen(Main game, CarInfo carInfo, LevelInfo levelInfo) {
+    public PlayScreen(Game game, CarInfo carInfo, LevelInfo levelInfo) {
         this.game = game;
         this.carInfo = carInfo;
         this.levelInfo = levelInfo;
@@ -54,9 +55,9 @@ public class PlayScreen implements Screen {
         carPrevPos = playerCar.body.getPosition();
 
 
-        texture = new Texture(Gdx.files.internal("race.png"));
+        texture = new Texture(Gdx.files.internal(levelInfo.levelTexture));
 
-        BodyLoader bodyLoader = new BodyLoader(Gdx.files.internal("map_physics1.json"));
+        BodyLoader bodyLoader = new BodyLoader(Gdx.files.internal(levelInfo.levelPath));
 
         BodyDef bd = new BodyDef();
         bd.position.set(0, 0);
@@ -69,7 +70,7 @@ public class PlayScreen implements Screen {
 
         Body body = world.createBody(bd);
 
-        bodyLoader.attachFixture(body, "Name", fd, 400);
+        bodyLoader.attachFixture(body, levelInfo.bodyName, fd, 400);
     }
 
     public void show() {
@@ -113,7 +114,7 @@ public class PlayScreen implements Screen {
         playerCar.render(spriteBatch);
         spriteBatch.end();
 
-        b2dr.render(this.world, this.gamecam.combined);
+        //b2dr.render(this.world, this.gamecam.combined);
 
         gameInput.render(spriteBatch);
     }

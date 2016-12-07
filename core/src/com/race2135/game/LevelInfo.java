@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
  */
 
 public class LevelInfo {
-    String levelName, levelDescription;
+    String levelName, levelDescription, levelTexture;
 
     public String levelPath;
     public int levelScale;
@@ -36,6 +36,8 @@ public class LevelInfo {
         testTrack.levelName = "Test";
         testTrack.levelDescription = "Just a test track.";
 
+        testTrack.levelTexture = "race.png";
+
         testTrack.levelPath = "map_physics1.json";
         testTrack.levelScale = 400;
         testTrack.bodyName = "Name";
@@ -44,5 +46,21 @@ public class LevelInfo {
         testTrack.roundPivot = new Vector2(235, 80);
 
         levels.add(testTrack);
+
+
+        LevelInfo sand = new LevelInfo();
+        sand.levelName = "Sand";
+        sand.levelDescription = "Sand Map";
+
+        sand.levelTexture = "race_sand.png";
+
+        sand.levelPath = "sandmap.json";
+        sand.levelScale = 400;
+        sand.bodyName = "map";
+
+        sand.startPosition = new Vector2(430/5, 1160/5);
+        sand.roundPivot = new Vector2(235, 80);
+
+        levels.add(sand);
     }
 }

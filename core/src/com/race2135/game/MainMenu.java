@@ -24,11 +24,15 @@ public class MainMenu implements Screen {
     Stage stage;
     SpriteBatch batch;
 
+    Texture bg;
+
     public MainMenu(Main g){
         game= g;
 
         batch = new SpriteBatch();
         stage = new Stage();
+
+        bg = new Texture("menu/background.png");
 
         skin = new Skin();
         Pixmap pixmap = new Pixmap(100, 50, Format.RGBA8888);
@@ -57,7 +61,7 @@ public class MainMenu implements Screen {
         textButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
                 textButton.setText("Starting new game");
-                game.setScreen(game.playScreen);
+                game.setScreen(game.carSelectionScreen);
 
             }
         });
@@ -72,7 +76,12 @@ public class MainMenu implements Screen {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+
+        batch.begin();
+        batch.draw(bg, 0, 0);
+        batch.end();
         stage.draw();
+
     }
 
     @Override
