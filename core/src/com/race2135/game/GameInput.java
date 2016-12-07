@@ -123,7 +123,12 @@ public class GameInput implements InputProcessor {
         return brake * 0.9f + 0.1f; // Engine braking, specified by the exercise
     }
     public int getGear() {
-        return (gearIsDragging ? 0 : gear);
+        return (gearIsDragging || throttle == 0 ? 0 : gear);
+    }
+
+    public void setStartLights(int numLights)
+    {
+        //TODO
     }
 
     //Update method (called by input event methods)
@@ -233,8 +238,8 @@ public class GameInput implements InputProcessor {
         spriteBrakePedal.setBounds(0, 0, pedalSize,
                 pedalSize * texGasPedal.getHeight() / texGasPedal.getWidth());
 
-        spriteGearBkg.setBounds(screenWidth * 29 / 30, 0, screenWidth / 30, screenHeight);
-        spriteGearKnob.setBounds(spriteGearBkg.getX(), 0, screenWidth / 30, screenWidth / 30);
+        spriteGearBkg.setBounds(screenWidth * 24 / 25, 0, screenWidth / 25, screenHeight);
+        spriteGearKnob.setBounds(spriteGearBkg.getX(), 0, screenWidth / 25, screenWidth / 25);
 
         update();
 
