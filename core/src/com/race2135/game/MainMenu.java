@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -25,6 +26,7 @@ public class MainMenu implements Screen {
     SpriteBatch batch;
 
     Texture bg;
+    BitmapFont descFont;
 
     float ratioX = (float)Gdx.graphics.getWidth() / 800, ratioY = (float)Gdx.graphics.getHeight() / 480;
 
@@ -34,32 +36,32 @@ public class MainMenu implements Screen {
         batch = new SpriteBatch();
         stage = new Stage();
 
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = (int)(20 * ratioX);
+        descFont = generator.generateFont(parameter); // font size 12 pixels
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
         bg = new Texture("menu/background.png");
 
         skin = new Skin();
-        Pixmap pixmap = new Pixmap(100, 50, Format.RGBA8888);
-        pixmap.setColor(Color.GRAY);
-        pixmap.fill();
-
-        skin.add("background", new Texture(pixmap));
-        BitmapFont bfont = new BitmapFont();
-        bfont.getData().setScale(ratioX, ratioY);
-        skin.add("default",bfont);
+        skin.add("play", new Texture("menu/1.png"));
+        skin.add("default",descFont);
 
         TextButtonStyle textButtonStyle = new TextButtonStyle();
-        textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
-        textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
-        textButtonStyle.checked = skin.newDrawable("background", Color.DARK_GRAY);
-        textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
+        textButtonStyle.up = skin.newDrawable("play", Color.WHITE);
+        textButtonStyle.down = skin.newDrawable("play", Color.DARK_GRAY);
+        textButtonStyle.checked = skin.newDrawable("play", Color.WHITE);
+        textButtonStyle.over = skin.newDrawable("play", Color.LIGHT_GRAY);
         textButtonStyle.font = skin.getFont("default");
 
         textButtonStyle.font = skin.getFont("default");
 
         skin.add("default", textButtonStyle);
 
-        final TextButton textButton = new TextButton("PLAY",textButtonStyle);
+        final TextButton textButton = new TextButton("",textButtonStyle);
         textButton.getLabel().setFontScale(ratioX, ratioY);
-        textButton.setSize(textButton.getWidth() * ratioX, textButton.getHeight() * ratioY);
+        textButton.setSize(textButton.getWidth() / 2 * ratioX, textButton.getHeight() / 2 * ratioY);
         textButton.setPosition(Gdx.graphics.getWidth() / 2 - textButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - textButton.getHeight() / 2);
         stage.addActor(textButton);
 

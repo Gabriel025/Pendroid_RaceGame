@@ -33,8 +33,8 @@ public class LevelInfo {
 
         LevelInfo testTrack = new LevelInfo();
 
-        testTrack.levelName = "Test";
-        testTrack.levelDescription = "Just a test track.";
+        testTrack.levelName = "Easy Map";
+        testTrack.levelDescription = "Easy track.";
 
         testTrack.levelTexture = "race.png";
         testTrack.trackTexture = "menu/track1.png";
