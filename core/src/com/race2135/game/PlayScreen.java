@@ -46,7 +46,7 @@ public class PlayScreen implements Screen {
         this.levelInfo = levelInfo;
 
         gamecam = new OrthographicCamera();
-        viewport = new FillViewport(40, 30, gamecam);
+        viewport = new FillViewport(60, 45, gamecam);
 
         gameInput = new GameInput(carInfo.numGears);
 

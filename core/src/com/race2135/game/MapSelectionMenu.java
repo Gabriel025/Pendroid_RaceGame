@@ -34,15 +34,19 @@ public class MapSelectionMenu implements Screen {
     Sprite dif;
     CarInfo carInfo;
 
+    Texture bg;
+
     public MapSelectionMenu(Game g, final CarInfo carInfo){
         this.game = g;
         this.carInfo = carInfo;
 
+        bg = new Texture("menu/bg2.jpg");
+
 
         maps = new Sprite[LevelInfo.levels.size];
         for (int i = 0; i < maps.length; i++) {
-            maps[i] = new Sprite(new Texture(LevelInfo.levels.get(i).levelTexture));
-            maps[i].setSize(300, 200);
+            maps[i] = new Sprite(new Texture(LevelInfo.levels.get(i).trackTexture));
+            maps[i].setSize(200, 300);
             maps[i].setPosition(Gdx.graphics.getWidth() / 2 - maps[i].getWidth() / 2, Gdx.graphics.getHeight() / 2 - maps[i].getHeight() / 2);
 
         }
@@ -133,6 +137,7 @@ public class MapSelectionMenu implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         sb.begin();
+        sb.draw(bg, 0, 0);
         maps[whichMap].draw(sb);
         sb.end();
 

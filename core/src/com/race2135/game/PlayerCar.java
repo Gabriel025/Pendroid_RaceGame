@@ -67,7 +67,7 @@ public class PlayerCar {
         fixtureDef.density = carInfo.mass / (carInfo.width * carInfo.length);
         fixtureDef.friction = 1;
 
-        texture = new Texture(Gdx.files.internal("car.png"));
+        texture = info.bodyTexture;
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         sprite = new Box2DSprite(texture);
 

@@ -33,17 +33,19 @@ public class CarSelectionMenu implements Screen {
 
     Sprite speed;
 
+    Texture bg;
+
     public CarSelectionMenu(Game g){
         game = g;
         font = new BitmapFont();
         speed = new Sprite(new Texture("menu/bar.png"));
 
-        cars = new Sprite[2];
-        cars[0] = new Sprite(new Texture("car.png"));
-        cars[0].setScale(1.2f);
-        cars[1] = new Sprite(new Texture("cars/ferrari.png"));
-        cars[1].setScale(0.1f);
-        cars[1].setRotation(180);
+        bg = new Texture("menu/bg2.jpg");
+
+        cars = new Sprite[CarInfo.models.size];
+        for (int i = 0; i < CarInfo.models.size; i++){
+            cars[i] = new Sprite(CarInfo.models.get(i).bodyTexture);
+        }
 
         for (int i = 0; i < cars.length; i++){
             cars[i].setPosition(Gdx.graphics.getWidth() / 2 - cars[i].getWidth() / 2, Gdx.graphics.getHeight() / 2 - cars[i].getHeight() / 2);
@@ -134,9 +136,9 @@ public class CarSelectionMenu implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
 
         sb.begin();
+        sb.draw(bg, 0, 0);
         cars[whichCar].draw(sb);
         font.draw(sb, CarInfo.models.get(whichCar).modelName, 20, 440);
 
@@ -145,6 +147,8 @@ public class CarSelectionMenu implements Screen {
         font.draw(sb, "Speed  ", Gdx.graphics.getWidth() / 10 * 4.4f - cars[0].getWidth() / 2, Gdx.graphics.getHeight() / 10 * 3.75f);
         speed.draw(sb);
         sb.end();
+
+        stage.draw();
 
     }
 

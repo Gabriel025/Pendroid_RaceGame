@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
  */
 
 public class LevelInfo {
-    String levelName, levelDescription, levelTexture;
+    String levelName, levelDescription, levelTexture, trackTexture;
 
     public String levelPath;
     public int levelScale;
@@ -37,6 +37,7 @@ public class LevelInfo {
         testTrack.levelDescription = "Just a test track.";
 
         testTrack.levelTexture = "race.png";
+        testTrack.trackTexture = "menu/track1.png";
 
         testTrack.levelPath = "map_physics1.json";
         testTrack.levelScale = 400;
@@ -53,6 +54,7 @@ public class LevelInfo {
         sand.levelDescription = "Sand Map";
 
         sand.levelTexture = "race_sand.png";
+        sand.trackTexture = "menu/track2.png";
 
         sand.levelPath = "sandmap.json";
         sand.levelScale = 400;

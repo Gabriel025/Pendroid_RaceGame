@@ -50,11 +50,11 @@ public class CarInfo {
         //TODO put some car definitions in here, and add them to the instance array
         //TODO it might be a good idea to load these from a file if we implement more cars
         CarInfo testCar = new CarInfo();
-        testCar.modelName = "Test";
+        testCar.modelName = "Default";
         testCar.modelDescription = "Just a test model.";
         testCar.speed = 120;
 
-        testCar.bodyTexture = new Texture("car.png");
+        testCar.bodyTexture = new Texture("cars/car.png");
         //testCar.tireTexture = new Texture("");
 
         testCar.width = 1.8f;
@@ -75,14 +75,31 @@ public class CarInfo {
 
         models.add(testCar);
 
-        CarInfo ferrari = new CarInfo();
-        ferrari.modelName = "Ferrari";
-        ferrari.modelDescription = "'The fastest...'";
-        ferrari.bodyTexture = new Texture("cars/ferrari.png");
-        ferrari.speed = 320;
+        CarInfo furgon = new CarInfo();
+        furgon.modelName = "Furgon";
+        furgon.modelDescription = "'The biggest...'";
+        furgon.bodyTexture = new Texture("cars/car2.png");
+        furgon.speed = 140;
 
 
-        models.add(ferrari);
+        furgon.width = 1.8f;
+        furgon.length = 4f;
+        furgon.tireDiameter = 0.65f;
+        furgon.tireThickness = 0.2f;
+        furgon.mass = 2000f;
+
+        furgon.engineSoundLowPath = "test_engine_low.wav";
+        furgon.engineSoundLowRPM = 900;
+        furgon.engineSoundHighPath = "test_engine_high.wav";
+        furgon.engineSoundHighRPM = 3600;
+
+        furgon.numGears = 7;
+        furgon.gearRatios = new float[]{-1f / 2.285f, 0f,1f / 2.774f, 1f / 1.974f, 1f / 1.534f, 1f, 1f / 0.756f};
+
+        testCar.is4x4 = true;
+
+
+        models.add(furgon);
 
         //MISSING INFOS
     }
