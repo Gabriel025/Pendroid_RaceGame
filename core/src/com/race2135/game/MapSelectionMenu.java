@@ -36,7 +36,7 @@ public class MapSelectionMenu implements Screen {
 
     Texture bg;
 
-    float ratioX = Gdx.graphics.getWidth() / 800, ratioY = Gdx.graphics.getHeight() / 480;
+    float ratioX = (float)Gdx.graphics.getWidth() / 800, ratioY = (float)Gdx.graphics.getHeight() / 480;
 
 
     public MapSelectionMenu(Game g, final CarInfo carInfo){
@@ -143,7 +143,7 @@ public class MapSelectionMenu implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         sb.begin();
-        sb.draw(bg, 0, 0, 860 * ratioX, 480 * ratioY);
+        sb.draw(bg, 0, 0, 800 * ratioX, 480 * ratioY);
         maps[whichMap].draw(sb);
         sb.end();
 

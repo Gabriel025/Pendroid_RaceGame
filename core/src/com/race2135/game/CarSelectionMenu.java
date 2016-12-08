@@ -35,7 +35,7 @@ public class CarSelectionMenu implements Screen {
 
     Texture bg;
 
-    float ratioX = Gdx.graphics.getWidth() / 800, ratioY = Gdx.graphics.getHeight() / 480;
+    float ratioX = (float)Gdx.graphics.getWidth() / 800, ratioY = (float)Gdx.graphics.getHeight() / 480;
 
     public CarSelectionMenu(Game g){
         game = g;
@@ -146,7 +146,8 @@ public class CarSelectionMenu implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         sb.begin();
-        sb.draw(bg, 0, 0, 860 * ratioX, 480 * ratioY);
+        sb.draw(bg, 0, 0, 800 * ratioX, 480 * ratioY);
+        //Gdx.app.log("size", "X:" + 800 * ratioX);
         cars[whichCar].draw(sb);
 
         speed.setSize(CarInfo.models.get(whichCar).speed / 2 * ratioX, 12 * ratioY);
@@ -161,7 +162,6 @@ public class CarSelectionMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
 
     @Override

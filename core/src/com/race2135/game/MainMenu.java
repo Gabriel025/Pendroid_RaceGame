@@ -26,7 +26,7 @@ public class MainMenu implements Screen {
 
     Texture bg;
 
-    float ratioX = Gdx.graphics.getWidth() / 800, ratioY = Gdx.graphics.getHeight() / 480;
+    float ratioX = (float)Gdx.graphics.getWidth() / 800, ratioY = (float)Gdx.graphics.getHeight() / 480;
 
     public MainMenu(Main g){
         game= g;
@@ -83,7 +83,7 @@ public class MainMenu implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         batch.begin();
-        batch.draw(bg, 0, 0, 860 * ratioX, 480 * ratioY);
+        batch.draw(bg, 0, 0, 800 * ratioX, 480 * ratioY);
         batch.end();
         stage.draw();
 
