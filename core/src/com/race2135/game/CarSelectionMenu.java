@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -29,7 +30,7 @@ public class CarSelectionMenu implements Screen {
 
     SpriteBatch sb;
 
-    BitmapFont font;
+    BitmapFont font, descFont, titleFont;
 
     Sprite speed, mass;
 
@@ -41,6 +42,19 @@ public class CarSelectionMenu implements Screen {
         game = g;
         font = new BitmapFont();
         font.getData().setScale(ratioX, ratioY);
+        descFont = new BitmapFont();
+        titleFont = new BitmapFont();
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = (int)(15 * ratioX);
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 5;
+        descFont = generator.generateFont(parameter);
+        parameter.size = (int)(40 * ratioX);
+        titleFont = generator.generateFont(parameter);
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
+
         speed = new Sprite(new Texture("menu/bar.png"));
         mass = new Sprite(new Texture("menu/bar.png"));
 
@@ -174,13 +188,17 @@ public class CarSelectionMenu implements Screen {
 
         speed.setSize(CarInfo.models.get(whichCar).speed / 2 * ratioX, 12 * ratioY);
         speed.setPosition(Gdx.graphics.getWidth() / 2 - cars[0].getWidth() / 2, Gdx.graphics.getHeight() / 10 * 3.5f);
-        font.draw(sb, "Speed  ", Gdx.graphics.getWidth() / 10 * 4.4f - cars[0].getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 10 * 3.75f);
+        descFont.draw(sb, "Speed  ", Gdx.graphics.getWidth() / 10 * 4f - cars[0].getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 10 * 3.75f);
         speed.draw(sb);
 
         mass.setSize(CarInfo.models.get(whichCar).mass / 15 * ratioX, 12 * ratioY);
         mass.setPosition(Gdx.graphics.getWidth() / 2 - cars[0].getWidth() / 2, Gdx.graphics.getHeight() / 10 * 3f);
-        font.draw(sb, "Mass  ", Gdx.graphics.getWidth() / 10 * 4.4f - cars[0].getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 10 * 3.25f);
+        descFont.draw(sb, "Mass  ", Gdx.graphics.getWidth() / 10 * 4f - cars[0].getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 10 * 3.25f);
         mass.draw(sb);
+
+        descFont.draw(sb, "Info: " + CarInfo.models.get(whichCar).modelDescription, 15 * ratioX, Gdx.graphics.getHeight() / 10 * 7.5f);
+        descFont.draw(sb, "Name: " + CarInfo.models.get(whichCar).modelName, 15 * ratioX, Gdx.graphics.getHeight() / 10 * 8);
+        titleFont.draw(sb, "Choose a car", Gdx.graphics.getWidth() / 2 - 150 * ratioX, Gdx.graphics.getHeight() / 10 * 9.5f);
         sb.end();
 
         stage.draw();

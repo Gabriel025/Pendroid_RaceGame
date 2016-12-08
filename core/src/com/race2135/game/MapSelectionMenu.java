@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -35,6 +36,7 @@ public class MapSelectionMenu implements Screen {
     CarInfo carInfo;
 
     Texture bg;
+    BitmapFont descFont, titleFont;
 
     float ratioX = (float)Gdx.graphics.getWidth() / 800, ratioY = (float)Gdx.graphics.getHeight() / 480;
 
@@ -45,6 +47,18 @@ public class MapSelectionMenu implements Screen {
 
         bg = new Texture("menu/bg2.jpg");
 
+
+        descFont = new BitmapFont();
+        titleFont = new BitmapFont();
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = (int)(15 * ratioX);
+        parameter.borderColor = Color.BLACK;
+        parameter.borderWidth = 5;
+        descFont = generator.generateFont(parameter);
+        parameter.size = (int)(40 * ratioX);
+        titleFont = generator.generateFont(parameter);
+        generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
         maps = new Sprite[LevelInfo.levels.size];
         for (int i = 0; i < maps.length; i++) {
@@ -168,6 +182,11 @@ public class MapSelectionMenu implements Screen {
         sb.begin();
         sb.draw(bg, 0, 0, 800 * ratioX, 480 * ratioY);
         maps[whichMap].draw(sb);
+
+
+        descFont.draw(sb, "Info: " + LevelInfo.levels.get(whichMap).levelDescription, 15 * ratioX, Gdx.graphics.getHeight() / 10 * 7.5f);
+        descFont.draw(sb, "Name: " + LevelInfo.levels.get(whichMap).levelName, 15 * ratioX, Gdx.graphics.getHeight() / 10 * 8);
+        titleFont.draw(sb, "Choose a map", Gdx.graphics.getWidth() / 2 - 150 * ratioX, Gdx.graphics.getHeight() / 10 * 9.5f);
         sb.end();
 
         stage.draw();
