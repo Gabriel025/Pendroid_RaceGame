@@ -62,6 +62,8 @@ public class MapSelectionMenu implements Screen {
         skin.add("left", new Texture("menu/arrowL.png"));
         skin.add("right", new Texture("menu/arrowR.png"));
         skin.add("play", new Texture("menu/play_button.png"));
+        skin.add("back", new Texture("menu/back.png"));
+
         BitmapFont bfont = new BitmapFont();
         skin.add("default",bfont);
 
@@ -127,6 +129,27 @@ public class MapSelectionMenu implements Screen {
             }
         });
         stage.addActor(playButton);
+
+
+        TextButton.TextButtonStyle backStyle = new TextButton.TextButtonStyle();
+        backStyle.up = skin.newDrawable("back", Color.GREEN);
+        backStyle.down = skin.newDrawable("back", Color.DARK_GRAY);
+        backStyle.checked = skin.newDrawable("back", Color.GREEN);
+        backStyle.over = skin.newDrawable("back", Color.GREEN);
+        backStyle.font = skin.getFont("default");
+
+        backStyle.font = skin.getFont("default");
+
+        final TextButton backButton = new TextButton("",backStyle);
+        backButton.setSize(backButton.getWidth() / 5.5f * ratioX, backButton.getHeight() / 5.5f * ratioY);
+        backButton.setPosition(Gdx.graphics.getWidth() / 10 - backButton.getWidth() / 2, Gdx.graphics.getHeight() / 8 - backButton.getHeight() / 2);
+        backButton.addListener(new ChangeListener() {
+            public void changed (ChangeListener.ChangeEvent event, Actor actor) {
+                //game.setScreen(new PlayScreen(game, CarInfo.models.get(whichCar), LevelInfo.levels.get(0)));
+                game.setScreen(new CarSelectionMenu(game));
+            }
+        });
+        stage.addActor(backButton);
     }
 
 

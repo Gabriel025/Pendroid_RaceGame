@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class MainMenu implements Screen {
-    Main game;
+    Game game;
 
     Skin skin;
     Stage stage;
@@ -28,7 +28,7 @@ public class MainMenu implements Screen {
 
     float ratioX = (float)Gdx.graphics.getWidth() / 800, ratioY = (float)Gdx.graphics.getHeight() / 480;
 
-    public MainMenu(Main g){
+    public MainMenu(Game g){
         game= g;
 
         batch = new SpriteBatch();
@@ -60,7 +60,7 @@ public class MainMenu implements Screen {
         final TextButton textButton = new TextButton("PLAY",textButtonStyle);
         textButton.getLabel().setFontScale(ratioX, ratioY);
         textButton.setSize(textButton.getWidth() * ratioX, textButton.getHeight() * ratioY);
-        textButton.setPosition(Gdx.graphics.getWidth() / 2 - textButton.getWidth() / 2 / ratioX, Gdx.graphics.getHeight() / 2 - textButton.getHeight() / 2 / ratioY);
+        textButton.setPosition(Gdx.graphics.getWidth() / 2 - textButton.getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 2 - textButton.getHeight() / 2 / ratioY);
         stage.addActor(textButton);
 
         textButton.addListener(new ChangeListener() {

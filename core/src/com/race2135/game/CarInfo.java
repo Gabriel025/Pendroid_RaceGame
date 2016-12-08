@@ -52,7 +52,7 @@ public class CarInfo {
         CarInfo testCar = new CarInfo();
         testCar.modelName = "Default";
         testCar.modelDescription = "Just a test model.";
-        testCar.speed = 120;
+        testCar.speed = 160;
 
         testCar.bodyTexture = new Texture("cars/car.png");
         //testCar.tireTexture = new Texture("");
@@ -79,7 +79,7 @@ public class CarInfo {
         furgon.modelName = "Furgon";
         furgon.modelDescription = "'The biggest...'";
         furgon.bodyTexture = new Texture("cars/car2.png");
-        furgon.speed = 140;
+        furgon.speed = 120;
 
 
         furgon.width = 1.8f;

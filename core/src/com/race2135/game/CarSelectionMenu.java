@@ -31,17 +31,18 @@ public class CarSelectionMenu implements Screen {
 
     BitmapFont font;
 
-    Sprite speed;
+    Sprite speed, mass;
 
     Texture bg;
 
     float ratioX = (float)Gdx.graphics.getWidth() / 800, ratioY = (float)Gdx.graphics.getHeight() / 480;
 
-    public CarSelectionMenu(Game g){
+    public CarSelectionMenu(final Game g){
         game = g;
         font = new BitmapFont();
         font.getData().setScale(ratioX, ratioY);
         speed = new Sprite(new Texture("menu/bar.png"));
+        mass = new Sprite(new Texture("menu/bar.png"));
 
         bg = new Texture("menu/bg2.jpg");
 
@@ -63,6 +64,7 @@ public class CarSelectionMenu implements Screen {
         skin.add("left", new Texture("menu/arrowL.png"));
         skin.add("right", new Texture("menu/arrowR.png"));
         skin.add("play", new Texture("menu/play_button.png"));
+        skin.add("back", new Texture("menu/back.png"));
         BitmapFont bfont = new BitmapFont();
         skin.add("default",bfont);
 
@@ -130,6 +132,26 @@ public class CarSelectionMenu implements Screen {
         });
         stage.addActor(playButton);
 
+        TextButton.TextButtonStyle backStyle = new TextButton.TextButtonStyle();
+        backStyle.up = skin.newDrawable("back", Color.GREEN);
+        backStyle.down = skin.newDrawable("back", Color.DARK_GRAY);
+        backStyle.checked = skin.newDrawable("back", Color.GREEN);
+        backStyle.over = skin.newDrawable("back", Color.GREEN);
+        backStyle.font = skin.getFont("default");
+
+        backStyle.font = skin.getFont("default");
+
+        final TextButton backButton = new TextButton("",backStyle);
+        backButton.setSize(backButton.getWidth() / 5.5f * ratioX, backButton.getHeight() / 5.5f * ratioY);
+        backButton.setPosition(Gdx.graphics.getWidth() / 10 - backButton.getWidth() / 2, Gdx.graphics.getHeight() / 8 - backButton.getHeight() / 2);
+        backButton.addListener(new ChangeListener() {
+            public void changed (ChangeListener.ChangeEvent event, Actor actor) {
+                //game.setScreen(new PlayScreen(game, CarInfo.models.get(whichCar), LevelInfo.levels.get(0)));
+                game.setScreen(new MainMenu(game));
+            }
+        });
+        stage.addActor(backButton);
+
     }
 
 
@@ -154,6 +176,11 @@ public class CarSelectionMenu implements Screen {
         speed.setPosition(Gdx.graphics.getWidth() / 2 - cars[0].getWidth() / 2, Gdx.graphics.getHeight() / 10 * 3.5f);
         font.draw(sb, "Speed  ", Gdx.graphics.getWidth() / 10 * 4.4f - cars[0].getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 10 * 3.75f);
         speed.draw(sb);
+
+        mass.setSize(CarInfo.models.get(whichCar).mass / 15 * ratioX, 12 * ratioY);
+        mass.setPosition(Gdx.graphics.getWidth() / 2 - cars[0].getWidth() / 2, Gdx.graphics.getHeight() / 10 * 3f);
+        font.draw(sb, "Mass  ", Gdx.graphics.getWidth() / 10 * 4.4f - cars[0].getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 10 * 3.25f);
+        mass.draw(sb);
         sb.end();
 
         stage.draw();
