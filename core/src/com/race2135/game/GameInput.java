@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -101,7 +102,14 @@ public class GameInput implements InputProcessor {
         texLight = new Texture("HUD/light.png");
         texLight.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        font = new BitmapFont(true);
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("font.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        param.borderColor = Color.BLACK;
+        param.borderWidth = 5;
+        param.size = 45;
+        param.flip = true;
+        font = generator.generateFont(param);
 
         //Gas pedal sprites
         spriteGasBkg = new Sprite(texBkg);
@@ -252,7 +260,7 @@ public class GameInput implements InputProcessor {
 
             String timeStr = "" + min + ":" + sec + "." + centisec;
 
-            font.draw(batch, timeStr, 0, 0);
+            font.draw(batch, timeStr, 10, 10);
         }
 
         batch.end();
@@ -274,8 +282,8 @@ public class GameInput implements InputProcessor {
         spriteBrakePedal.setBounds(0, 0, pedalSize,
                 pedalSize * texGasPedal.getHeight() / texGasPedal.getWidth());
 
-        spriteGearBkg.setBounds(screenWidth * 19 / 20, 0, screenWidth / 20, screenHeight);
-        spriteGearKnob.setBounds(spriteGearBkg.getX(), 0, screenWidth / 20, screenWidth / 20);
+        spriteGearBkg.setBounds(screenWidth * 14 / 15, 0, screenWidth / 15, screenHeight);
+        spriteGearKnob.setBounds(spriteGearBkg.getX(), 0, screenWidth / 15, screenWidth / 15);
 
         update();
 
