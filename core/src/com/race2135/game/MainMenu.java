@@ -60,7 +60,7 @@ public class MainMenu implements Screen {
         final TextButton textButton = new TextButton("PLAY",textButtonStyle);
         textButton.getLabel().setFontScale(ratioX, ratioY);
         textButton.setSize(textButton.getWidth() * ratioX, textButton.getHeight() * ratioY);
-        textButton.setPosition(Gdx.graphics.getWidth() / 2 - textButton.getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 2 - textButton.getHeight() / 2 / ratioY);
+        textButton.setPosition(Gdx.graphics.getWidth() / 2 - textButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - textButton.getHeight() / 2);
         stage.addActor(textButton);
 
         textButton.addListener(new ChangeListener() {
