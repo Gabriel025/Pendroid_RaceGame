@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -53,7 +54,7 @@ public class GameInput implements InputProcessor {
     private Sprite spriteGasBkg, spriteGasPedal,
             spriteBrakeBkg, spriteBrakePedal,
             spriteGearBkg, spriteGearKnob;
-    private BitmapFont font;
+    BitmapFont font;
 
     //Number of gears (including R and N)
     int numGears;
@@ -64,6 +65,12 @@ public class GameInput implements InputProcessor {
     //Processed user input
     private float throttle, brake;
     private int gear = 0; //-1 is reverse, 0 is neutral, ...
+
+    //Lights at the start
+    private int numLights = 0;
+    Texture texLight;
+
+    long time;
 
     //Constructor
     public GameInput(int numGears)
@@ -90,6 +97,9 @@ public class GameInput implements InputProcessor {
 
         texKnob = new Texture("HUD/knob.png");
         texKnob.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        texLight = new Texture("HUD/light.png");
+        texLight.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         font = new BitmapFont(true);
 
@@ -122,13 +132,20 @@ public class GameInput implements InputProcessor {
     public float getBraking() {
         return brake * 0.9f + 0.1f; // Engine braking, specified by the exercise
     }
+
+    public void setGear(int gear) { this.gear = gear; update(); }
     public int getGear() {
         return (gearIsDragging || throttle == 0 ? 0 : gear);
     }
 
     public void setStartLights(int numLights)
     {
-        //TODO
+        this.numLights = numLights;
+    }
+
+    public void setDisplayTime(long time)
+    {
+        this.time = time;
     }
 
     //Update method (called by input event methods)
@@ -219,6 +236,25 @@ public class GameInput implements InputProcessor {
         spriteGearBkg.draw(batch);
         spriteGearKnob.draw(batch);
 
+        for(int i = 0; i < numLights; i++) {
+            Sprite spr = new Sprite(texLight);
+            spr.setBounds((float) screenWidth / 9 * (3 + i), 0,
+                    (float) screenWidth / 9, (float) screenWidth / 9);
+            spr.setColor((i == 2 ? Color.GREEN : Color.RED));
+
+            spr.draw(batch);
+        }
+
+        if(time > 0)
+        {
+            long min = time / 60000, sec = (time - min * 60000) / 1000,
+                    centisec = (time - min * 60000 - sec * 1000) / 10;
+
+            String timeStr = "" + min + ":" + sec + "." + centisec;
+
+            font.draw(batch, timeStr, 0, 0);
+        }
+
         batch.end();
     }
 
@@ -238,8 +274,8 @@ public class GameInput implements InputProcessor {
         spriteBrakePedal.setBounds(0, 0, pedalSize,
                 pedalSize * texGasPedal.getHeight() / texGasPedal.getWidth());
 
-        spriteGearBkg.setBounds(screenWidth * 24 / 25, 0, screenWidth / 25, screenHeight);
-        spriteGearKnob.setBounds(spriteGearBkg.getX(), 0, screenWidth / 25, screenWidth / 25);
+        spriteGearBkg.setBounds(screenWidth * 19 / 20, 0, screenWidth / 20, screenHeight);
+        spriteGearKnob.setBounds(spriteGearBkg.getX(), 0, screenWidth / 20, screenWidth / 20);
 
         update();
 

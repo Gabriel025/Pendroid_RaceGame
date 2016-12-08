@@ -3,9 +3,11 @@ package com.race2135.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -14,7 +16,6 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -37,8 +38,11 @@ public class PlayScreen implements Screen {
     SpriteBatch spriteBatch;
     Texture texture;
 
-    long time;
-    boolean started = false;
+    long startTime, time;
+    int startCnt = 1;
+    Sound startBeep;
+
+    boolean ended = false;
 
     public PlayScreen(Game game, CarInfo carInfo, LevelInfo levelInfo) {
         this.game = game;
@@ -46,7 +50,7 @@ public class PlayScreen implements Screen {
         this.levelInfo = levelInfo;
 
         gamecam = new OrthographicCamera();
-        viewport = new FillViewport(60, 45, gamecam);
+        viewport = new FillViewport(80, 60, gamecam);
 
         gameInput = new GameInput(carInfo.numGears);
 
@@ -59,6 +63,7 @@ public class PlayScreen implements Screen {
         playerCar = new PlayerCar(world, carInfo, levelInfo.startPosition, 0, gameInput);
         carPrevPos = playerCar.body.getPosition();
 
+        startBeep = Gdx.audio.newSound(Gdx.files.internal("beep.wav"));
 
         texture = new Texture(Gdx.files.internal(levelInfo.levelTexture));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -81,10 +86,43 @@ public class PlayScreen implements Screen {
 
     public void show() {
         Gdx.input.setInputProcessor(gameInput);
-        time = TimeUtils.millis() + 3000;
+
+        startTime = TimeUtils.millis();
     }
 
     public void update(float dt) {
+        if(ended) return;
+
+
+        time = TimeUtils.millis();
+
+        if(startCnt < 5) {
+            if(startCnt < 3) gameInput.setGear(0);
+
+            if (time - startTime > 4000) {
+                startCnt = 5;
+                gameInput.setStartLights(0);
+                startBeep.stop();
+            }else if (time - startTime > 3000 && startCnt == 3)
+            {
+                startCnt = 4;
+                gameInput.setStartLights(3);
+                gameInput.setGear(1);
+                startBeep.loop(1, 2, 0);
+            } else if(time - startTime > 2000 && startCnt == 2)
+            {
+                startCnt = 3;
+                gameInput.setStartLights(2);
+                startBeep.play(1, 1, 0);
+            } else if(time - startTime > 1000 && startCnt == 1)
+            {
+                startCnt = 2;
+                gameInput.setStartLights(1);
+                startBeep.play(1, 1, 0);
+            }
+        }
+        gameInput.setDisplayTime(time - startTime - 3000);
+
         playerCar.update();
 
         world.step(1f/60f, 6, 2);
@@ -99,8 +137,7 @@ public class PlayScreen implements Screen {
 
         carPrevPos = playerCar.body.getPosition().cpy();
 
-        //if(deltaAngle >= 360f) Gdx.app.log("Level finished!", "" + deltaAngle);
-        //else Gdx.app.log("Angle", "" + deltaAngle);
+        if(deltaAngle >= 360f) ended = true;
     }
 
     public void render(float delta) {
