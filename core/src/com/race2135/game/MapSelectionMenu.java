@@ -36,6 +36,9 @@ public class MapSelectionMenu implements Screen {
 
     Texture bg;
 
+    float ratioX = Gdx.graphics.getWidth() / 800, ratioY = Gdx.graphics.getHeight() / 480;
+
+
     public MapSelectionMenu(Game g, final CarInfo carInfo){
         this.game = g;
         this.carInfo = carInfo;
@@ -46,7 +49,7 @@ public class MapSelectionMenu implements Screen {
         maps = new Sprite[LevelInfo.levels.size];
         for (int i = 0; i < maps.length; i++) {
             maps[i] = new Sprite(new Texture(LevelInfo.levels.get(i).trackTexture));
-            maps[i].setSize(200, 300);
+            maps[i].setSize(200 * ratioX, 300 * ratioY);
             maps[i].setPosition(Gdx.graphics.getWidth() / 2 - maps[i].getWidth() / 2, Gdx.graphics.getHeight() / 2 - maps[i].getHeight() / 2);
 
         }
@@ -74,6 +77,7 @@ public class MapSelectionMenu implements Screen {
         skin.add("default", textButtonStyle);
 
         final TextButton leftButton = new TextButton("",textButtonStyle);
+        leftButton.setSize(leftButton.getWidth() * ratioX, leftButton.getHeight() * ratioY);
         leftButton.setPosition(Gdx.graphics.getWidth() / 10 * 3 - leftButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - leftButton.getHeight() / 2);
         leftButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
@@ -94,6 +98,7 @@ public class MapSelectionMenu implements Screen {
         textButtonStyleR.font = skin.getFont("default");
 
         final TextButton rightButton = new TextButton("",textButtonStyleR);
+        rightButton.setSize(rightButton.getWidth() * ratioX, rightButton.getHeight() * ratioY);
         rightButton.setPosition(Gdx.graphics.getWidth() / 10 * 7 - rightButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - rightButton.getHeight() / 2);
         rightButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
@@ -113,6 +118,7 @@ public class MapSelectionMenu implements Screen {
         textButtonStyleR.font = skin.getFont("default");
 
         final TextButton playButton = new TextButton("",playStyle);
+        playButton.setSize(ratioX * playButton.getWidth(), ratioY * playButton.getHeight());
         playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2, Gdx.graphics.getHeight() / 8 - playButton.getHeight() / 2);
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
@@ -137,7 +143,7 @@ public class MapSelectionMenu implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         sb.begin();
-        sb.draw(bg, 0, 0);
+        sb.draw(bg, 0, 0, 860 * ratioX, 480 * ratioY);
         maps[whichMap].draw(sb);
         sb.end();
 

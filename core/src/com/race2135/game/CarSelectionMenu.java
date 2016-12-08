@@ -35,9 +35,12 @@ public class CarSelectionMenu implements Screen {
 
     Texture bg;
 
+    float ratioX = Gdx.graphics.getWidth() / 800, ratioY = Gdx.graphics.getHeight() / 480;
+
     public CarSelectionMenu(Game g){
         game = g;
         font = new BitmapFont();
+        font.getData().setScale(ratioX, ratioY);
         speed = new Sprite(new Texture("menu/bar.png"));
 
         bg = new Texture("menu/bg2.jpg");
@@ -45,6 +48,7 @@ public class CarSelectionMenu implements Screen {
         cars = new Sprite[CarInfo.models.size];
         for (int i = 0; i < CarInfo.models.size; i++){
             cars[i] = new Sprite(CarInfo.models.get(i).bodyTexture);
+            cars[i].setScale(ratioX, ratioY);
         }
 
         for (int i = 0; i < cars.length; i++){
@@ -74,6 +78,8 @@ public class CarSelectionMenu implements Screen {
         skin.add("default", textButtonStyle);
 
         final TextButton leftButton = new TextButton("",textButtonStyle);
+        leftButton.setSize(leftButton.getWidth() * ratioX, leftButton.getHeight() * ratioY);
+
         leftButton.setPosition(Gdx.graphics.getWidth() / 10 * 3 - leftButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - leftButton.getHeight() / 2);
         leftButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
@@ -94,6 +100,7 @@ public class CarSelectionMenu implements Screen {
         textButtonStyleR.font = skin.getFont("default");
 
         final TextButton rightButton = new TextButton("",textButtonStyleR);
+        rightButton.setSize(rightButton.getWidth() * ratioX, rightButton.getHeight() * ratioY);
         rightButton.setPosition(Gdx.graphics.getWidth() / 10 * 7 - rightButton.getWidth() / 2, Gdx.graphics.getHeight() / 2 - rightButton.getHeight() / 2);
         rightButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
@@ -113,6 +120,7 @@ public class CarSelectionMenu implements Screen {
         textButtonStyleR.font = skin.getFont("default");
 
         final TextButton playButton = new TextButton("",playStyle);
+        playButton.setSize(playButton.getWidth() * ratioX, playButton.getHeight() * ratioY);
         playButton.setPosition(Gdx.graphics.getWidth() / 2 - playButton.getWidth() / 2, Gdx.graphics.getHeight() / 8 - playButton.getHeight() / 2);
         playButton.addListener(new ChangeListener() {
             public void changed (ChangeListener.ChangeEvent event, Actor actor) {
@@ -138,13 +146,12 @@ public class CarSelectionMenu implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         sb.begin();
-        sb.draw(bg, 0, 0);
+        sb.draw(bg, 0, 0, 860 * ratioX, 480 * ratioY);
         cars[whichCar].draw(sb);
-        font.draw(sb, CarInfo.models.get(whichCar).modelName, 20, 440);
 
-        speed.setSize(CarInfo.models.get(whichCar).speed / 2, 12);
+        speed.setSize(CarInfo.models.get(whichCar).speed / 2 * ratioX, 12 * ratioY);
         speed.setPosition(Gdx.graphics.getWidth() / 2 - cars[0].getWidth() / 2, Gdx.graphics.getHeight() / 10 * 3.5f);
-        font.draw(sb, "Speed  ", Gdx.graphics.getWidth() / 10 * 4.4f - cars[0].getWidth() / 2, Gdx.graphics.getHeight() / 10 * 3.75f);
+        font.draw(sb, "Speed  ", Gdx.graphics.getWidth() / 10 * 4.4f - cars[0].getWidth() / 2 * ratioX, Gdx.graphics.getHeight() / 10 * 3.75f);
         speed.draw(sb);
         sb.end();
 

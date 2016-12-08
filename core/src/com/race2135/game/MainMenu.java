@@ -26,6 +26,8 @@ public class MainMenu implements Screen {
 
     Texture bg;
 
+    float ratioX = Gdx.graphics.getWidth() / 800, ratioY = Gdx.graphics.getHeight() / 480;
+
     public MainMenu(Main g){
         game= g;
 
@@ -41,6 +43,7 @@ public class MainMenu implements Screen {
 
         skin.add("background", new Texture(pixmap));
         BitmapFont bfont = new BitmapFont();
+        bfont.getData().setScale(ratioX, ratioY);
         skin.add("default",bfont);
 
         TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -55,7 +58,9 @@ public class MainMenu implements Screen {
         skin.add("default", textButtonStyle);
 
         final TextButton textButton = new TextButton("PLAY",textButtonStyle);
-        textButton.setPosition(400 - textButton.getWidth() / 2, 240 - textButton.getHeight() / 2);
+        textButton.getLabel().setFontScale(ratioX, ratioY);
+        textButton.setSize(textButton.getWidth() * ratioX, textButton.getHeight() * ratioY);
+        textButton.setPosition(Gdx.graphics.getWidth() / 2 - textButton.getWidth() / 2 / ratioX, Gdx.graphics.getHeight() / 2 - textButton.getHeight() / 2 / ratioY);
         stage.addActor(textButton);
 
         textButton.addListener(new ChangeListener() {
@@ -78,7 +83,7 @@ public class MainMenu implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
         batch.begin();
-        batch.draw(bg, 0, 0);
+        batch.draw(bg, 0, 0, 860 * ratioX, 480 * ratioY);
         batch.end();
         stage.draw();
 
