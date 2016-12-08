@@ -108,12 +108,17 @@ public class PlayerCar {
 
     public void update() {
         float maxRPM = 4500, idleRPM = 900;
+        //if(carInfo.gearRatios[gameInput.getGear() + 1] != 0)
+        //    maxRPM /= carInfo.gearRatios[gameInput.getGear() + 1];
+        //if(maxRPM < 0) maxRPM = -maxRPM;
+
+        float lerpFactor = 0.02f;
         if(carInfo.gearRatios[gameInput.getGear() + 1] != 0)
-            maxRPM /= carInfo.gearRatios[gameInput.getGear() + 1];
-        if(maxRPM < 0) maxRPM = -maxRPM;
+         lerpFactor /= carInfo.gearRatios[gameInput.getGear() + 1];
+        if(lerpFactor < 0) lerpFactor = -lerpFactor;
 
         engineRPM = MathUtils.lerp(engineRPM,
-                (maxRPM - idleRPM) * gameInput.getThrottle() + idleRPM, 0.02f);
+                (maxRPM - idleRPM) * gameInput.getThrottle() + idleRPM, lerpFactor);
 
         if(engineSoundLowID == -1) engineSoundLowID = engineSoundLow.loop();
         if(engineSoundHighID == -1) engineSoundHighID = engineSoundHigh.loop();
@@ -158,7 +163,7 @@ public class PlayerCar {
         float angle = -acc.angleRad() / 2;
 
         if(angle <= -180) angle += 360;
-        angle = MathUtils.clamp(angle, -45, 45);
+        angle = MathUtils.clamp(angle, -(float)Math.PI / 4, (float)Math.PI / 4);
 
         leftJoint.setLimits(angle, angle);
         rightJoint.setLimits(angle, angle);
@@ -175,8 +180,8 @@ public class PlayerCar {
 
     float simpleTorqueCurve(float RPM)
     {
-        if(RPM < 900f) return MathUtils.lerp(0f, 220f, RPM / 900f);
-        if(RPM < 4500f) return MathUtils.lerp(220f, 310f, (RPM - 900f) / 4500f);
-        return MathUtils.lerp(310f, 200f, (RPM - 4500f) / 7500f);
+        if(RPM < 900f) return MathUtils.lerp(0f, 250f, RPM / 900f);
+        if(RPM < 4500f) return MathUtils.lerp(250f, 330f, (RPM - 900f) / 4500f);
+        return MathUtils.lerp(330f, 200f, (RPM - 4500f) / 7500f);
     }
 }
