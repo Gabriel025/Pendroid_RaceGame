@@ -16,7 +16,7 @@ public class LevelInfo {
 
     public Vector2 startPosition;
     public Vector2 roundPivot; //A point around which the car turns a full 360° upon
-    //level completion.
+                               //level completion.
 
     //TODO add start position
 
