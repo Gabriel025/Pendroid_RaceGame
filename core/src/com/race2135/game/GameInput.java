@@ -205,6 +205,8 @@ public class GameInput implements InputProcessor {
                 if(y > 0.5) gear--;
                 if(y <= -0.5) gear++;
 
+                gear = MathUtils.clamp(gear, -1, numGears);
+
                 spriteGearKnob.setY((1f - (float)(gear + 1) / (numGears - 1))
                         * (screenHeight - spriteGearKnob.getHeight()));
             }
@@ -262,6 +264,17 @@ public class GameInput implements InputProcessor {
 
             font.draw(batch, timeStr, 10, 10);
         }
+
+        String gearStr;
+        if(gear == -1) gearStr = "Reverse";
+        else if(gear == 0) gearStr = "Neutral";
+        else if(gear == 1) gearStr = "1st";
+        else if(gear == 2) gearStr = "2nd";
+        else if(gear == 3) gearStr = "3rd";
+        else gearStr = "" + gear + "th";
+
+        font.draw(batch, gearStr, screenWidth / 3 * 2,
+                screenHeight - font.getLineHeight() * 1.5f);
 
         batch.end();
     }

@@ -16,7 +16,7 @@ public class LevelInfo {
 
     public Vector2 startPosition;
     public Vector2 roundPivot; //A point around which the car turns a full 360° upon
-                               //level completion.
+    //level completion.
 
     //TODO add start position
 
@@ -33,8 +33,8 @@ public class LevelInfo {
 
         LevelInfo testTrack = new LevelInfo();
 
-        testTrack.levelName = "Easy Map";
-        testTrack.levelDescription = "Easy track.";
+        testTrack.levelName = "Basic";
+        testTrack.levelDescription = "Just a basic\ntrack.";
 
         testTrack.levelTexture = "race.png";
         testTrack.trackTexture = "menu/track1.png";
@@ -43,15 +43,15 @@ public class LevelInfo {
         testTrack.levelScale = 400;
         testTrack.bodyName = "Name";
 
-        testTrack.startPosition = new Vector2(250, 80);
-        testTrack.roundPivot = new Vector2(235, 80);
+        testTrack.startPosition = new Vector2(600f / 960f * 400f, (960f - 750f) / 960f * 400f);
+        testTrack.roundPivot = new Vector2(565f / 960f * 400f, (960f - 750f) / 960f * 400f);
 
         levels.add(testTrack);
 
 
         LevelInfo sand = new LevelInfo();
-        sand.levelName = "Sand";
-        sand.levelDescription = "Sand Map";
+        sand.levelName = "Sandy";
+        sand.levelDescription = "A simple track\nwith slightly\nworse traction.";
 
         sand.levelTexture = "race_sand.png";
         sand.trackTexture = "menu/track2.png";
@@ -60,9 +60,25 @@ public class LevelInfo {
         sand.levelScale = 400;
         sand.bodyName = "map";
 
-        sand.startPosition = new Vector2(430/5, 1160/5);
-        sand.roundPivot = new Vector2(235, 80);
+        sand.startPosition = new Vector2(205f / 960f * 400f, (960f - 595f) / 960f * 400f);
+        sand.roundPivot = new Vector2(235f / 960f * 400f, (960f - 595f) / 960f * 400f);
 
         levels.add(sand);
+
+        LevelInfo round = new LevelInfo();
+        round.levelName = "Round";
+        round.levelDescription = "A square track.";
+
+        round.levelTexture = "map3.png";
+        round.trackTexture = "track3.png";
+
+        round.levelPath = "map_phys3.json";
+        round.levelScale = 400;
+        round.bodyName = "Name";
+
+        round.startPosition = new Vector2(215f / 960f * 400f, (960f - 530f) / 960f * 400f);
+        round.roundPivot = new Vector2(245f / 960f * 400f, (960f - 530f) / 960f * 400f);
+
+        levels.add(round);
     }
 }

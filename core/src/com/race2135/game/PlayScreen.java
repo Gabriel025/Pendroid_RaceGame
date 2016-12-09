@@ -38,7 +38,7 @@ public class PlayScreen implements Screen {
     SpriteBatch spriteBatch;
     Texture texture;
 
-    long startTime, time;
+    long startTime, time, endTime;
     int startCnt = 1;
     Sound startBeep;
 
@@ -60,7 +60,7 @@ public class PlayScreen implements Screen {
 
         spriteBatch = new SpriteBatch();
 
-        playerCar = new PlayerCar(world, carInfo, levelInfo.startPosition, 0, gameInput);
+        playerCar = new PlayerCar(world, carInfo, levelInfo.startPosition, 0, gameInput, levelInfo.levelName == "Sandy");
         carPrevPos = playerCar.body.getPosition();
 
         startBeep = Gdx.audio.newSound(Gdx.files.internal("beep.wav"));
@@ -91,13 +91,19 @@ public class PlayScreen implements Screen {
     }
 
     public void update(float dt) {
-        if(ended) return;
+        if(ended) {
+            gameInput.setGear(0);
 
+            if (time - endTime > 2000)
+            {
+                game.setScreen(new TimeScreen(game, endTime - startTime - 3000));
+            }
+        }
 
         time = TimeUtils.millis();
 
         if(startCnt < 5) {
-            if(startCnt < 3) gameInput.setGear(0);
+            if(startCnt <= 3) gameInput.setGear(0);
 
             if (time - startTime > 4000) {
                 startCnt = 5;
@@ -121,7 +127,7 @@ public class PlayScreen implements Screen {
                 startBeep.play(1, 1, 0);
             }
         }
-        gameInput.setDisplayTime(time - startTime - 3000);
+        if(!ended) gameInput.setDisplayTime(time - startTime - 3000);
 
         playerCar.update();
 
@@ -137,7 +143,11 @@ public class PlayScreen implements Screen {
 
         carPrevPos = playerCar.body.getPosition().cpy();
 
-        if(deltaAngle >= 360f) ended = true;
+        if((deltaAngle >= 360f || deltaAngle <= -360f) && !ended)
+        {
+            ended = true;
+            endTime = time;
+        }
     }
 
     public void render(float delta) {
@@ -153,7 +163,7 @@ public class PlayScreen implements Screen {
 
         spriteBatch.begin();
         spriteBatch.setProjectionMatrix(gamecam.combined);
-        spriteBatch.draw(texture, 0, 0, 400, 400);
+        spriteBatch.draw(texture, 0, 0, levelInfo.levelScale, levelInfo.levelScale);
 
         playerCar.render(spriteBatch);
         spriteBatch.end();

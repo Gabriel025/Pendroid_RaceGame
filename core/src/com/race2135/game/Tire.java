@@ -23,9 +23,12 @@ public class Tire {
 
     Box2DSprite sprite;
 
-    public Tire(World world, CarInfo info) {
+    boolean sand;
+
+    public Tire(World world, CarInfo info, boolean sand) {
         this.world = world;
         carInfo = info;
+        this.sand = sand;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -59,14 +62,14 @@ public class Tire {
     }
 
     public void update(float driveTorque, float brake) {
-        Vector2 force = getLateralVelocity().scl(-0.5f * carInfo.mass); //Lateral friction
+        Vector2 force = getLateralVelocity().scl((sand ? -0.3f : -0.5f) * carInfo.mass); //Lateral friction
         body.applyForceToCenter(force, true);
 
-        force = getForwardVelocity().scl(-0.5f * brake * carInfo.mass); //Braking
+        force = getForwardVelocity().scl((sand ? -0.25f : -0.5f) * brake * carInfo.mass); //Braking
         body.applyForceToCenter(force, true);
 
         force = body.getWorldVector(new Vector2(0, 1)); //Engine drive
-        force.scl(carInfo.tireDiameter / 2 * driveTorque);
+        force.scl(carInfo.tireDiameter / 2 * driveTorque * (sand ? 0.9f : 1f));
 
         body.applyLinearImpulse(force, body.getWorldCenter(), true);
         //body.applyForceToCenterToCenter(driveForce, true);

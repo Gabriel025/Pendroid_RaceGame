@@ -42,7 +42,7 @@ public class PlayerCar {
     Sound engineSoundLow, engineSoundHigh;
     long engineSoundLowID = -1, engineSoundHighID = -1;
 
-    public PlayerCar(World world, CarInfo info, Vector2 position, float angle, GameInput gameInput) {
+    public PlayerCar(World world, CarInfo info, Vector2 position, float angle, GameInput gameInput, boolean sand) {
         this.world = world;
         carInfo = info;
         this.gameInput = gameInput;
@@ -81,25 +81,25 @@ public class PlayerCar {
         jointDef.upperAngle = 0;
         jointDef.localAnchorB.setZero();
 
-        Tire tire = new Tire(world, carInfo);
+        Tire tire = new Tire(world, carInfo, sand);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(-0.85f, -1.35f);
         world.createJoint(jointDef);
         tires.add(tire);
 
-        tire = new Tire(world, carInfo);
+        tire = new Tire(world, carInfo, sand);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(0.85f, -1.35f);
         world.createJoint(jointDef);
         tires.add(tire);
 
-        tire = new Tire(world, carInfo);
+        tire = new Tire(world, carInfo, sand);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(-0.85f, 1.35f);
         leftJoint = (RevoluteJoint)world.createJoint(jointDef);
         tires.add(tire);
 
-        tire = new Tire(world, carInfo);
+        tire = new Tire(world, carInfo, sand);
         jointDef.bodyB = tire.body;
         jointDef.localAnchorA.set(0.85f, 1.35f);
         rightJoint = (RevoluteJoint)world.createJoint(jointDef);
@@ -163,7 +163,7 @@ public class PlayerCar {
         float angle = -acc.angleRad() / 2;
 
         if(angle <= -180) angle += 360;
-        angle = MathUtils.clamp(angle, -(float)Math.PI / 4, (float)Math.PI / 4);
+        angle = MathUtils.clamp(angle, -(float)Math.PI / 6, (float)Math.PI / 6);
 
         leftJoint.setLimits(angle, angle);
         rightJoint.setLimits(angle, angle);

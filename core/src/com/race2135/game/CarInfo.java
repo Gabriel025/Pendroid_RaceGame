@@ -50,8 +50,8 @@ public class CarInfo {
         //TODO put some car definitions in here, and add them to the instance array
         //TODO it might be a good idea to load these from a file if we implement more cars
         CarInfo testCar = new CarInfo();
-        testCar.modelName = "Default";
-        testCar.modelDescription = "Just a test model.";
+        testCar.modelName = "Sports Sedan";
+        testCar.modelDescription = "Fast enough...";
         testCar.speed = 160;
 
         testCar.bodyTexture = new Texture("cars/car.png");
@@ -76,8 +76,8 @@ public class CarInfo {
         models.add(testCar);
 
         CarInfo furgon = new CarInfo();
-        furgon.modelName = "Furgon";
-        furgon.modelDescription = "'The biggest...'";
+        furgon.modelName = "Pickup truck";
+        furgon.modelDescription = "Not the best for racing, but it's spacious!";
         furgon.bodyTexture = new Texture("cars/car2.png");
         furgon.speed = 120;
 
