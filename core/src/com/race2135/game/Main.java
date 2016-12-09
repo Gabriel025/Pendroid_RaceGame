@@ -31,6 +31,7 @@ import com.badlogic.gdx.physics.box2d.Box2D;
  * -Sebességváltó
  * -Motorhang
  * -Választható autók, illetve pályák
+ * -Egy homokos, csúszósabb pálya
  */
 
 public class Main extends Game {
