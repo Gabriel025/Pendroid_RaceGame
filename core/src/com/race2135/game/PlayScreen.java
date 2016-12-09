@@ -96,6 +96,8 @@ public class PlayScreen implements Screen {
 
             if (time - endTime > 2000)
             {
+                playerCar.engineSoundLow.stop();
+                playerCar.engineSoundHigh.stop();
                 game.setScreen(new TimeScreen(game, endTime - startTime - 3000));
             }
         }
