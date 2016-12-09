@@ -60,8 +60,8 @@ public class LevelInfo {
         sand.levelScale = 400;
         sand.bodyName = "map";
 
-        sand.startPosition = new Vector2(430/5, 1160/5);
-        sand.roundPivot = new Vector2(235, 80);
+        sand.startPosition = new Vector2(425/5, 1135/5);
+        sand.roundPivot = new Vector2(386/5, 1224/5);
 
         levels.add(sand);
     }
